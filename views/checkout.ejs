@@ -1,0 +1,158 @@
+<!--Design for committing files to repository -->
+<!--@author
+Aanchal Tandel (aanchalmanharbhai.tandel@student.csulb.edu)
+Krishna Desai (krishna.desai@student.csulb.edu)
+Nithin Reddy Allala (nithinreddy.allala@student.csulb.edu)
+Priya M Joseph (priya.medackeljoseph@student.csulb.edu)
+Sujata Patil (sujata.patil@student.csulb.edu
+)-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>Form page</title>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+    <style>
+        input[type=button], input[type=submit], input[type=reset] {
+            background-color: #00B7FF;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px;
+            width: 200px;
+        }
+        input{
+            margin:20px;
+            padding:10px;
+        }
+        input[type=”text”],
+        textarea {
+            width:200px;
+            margin:5px;
+            padding:5px;
+            height:30px;
+            display: block;
+        }
+        textarea{
+            resize:none;
+            height:60px;
+        }
+        body {
+            justify-content: center;
+            text-align: center;
+            border-color: black;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 5px;
+            padding:30px;
+            margin-top:20px ;
+            margin-left: 250px;
+            margin-right: 250px;
+        }
+
+
+        /* selected link */
+        a:active,a:hover {
+            color: black;
+        }
+        a:link, a:visited {
+            background-color: dimgrey;
+            color: white;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div></div>
+
+<form action='/checkout' method='POST' enctype="multipart/form-data">
+    <h1>Commit Files</h1>
+
+    <a href="/">Home</a>
+    <a href="/create">Create</a>
+    <a href="/checkin">Checkin</a>
+    <a href="/checkout">Checkout</a>
+    <br>
+    <br>
+    Repository (Repository path):<input type="text" name="repo" ID="repo">
+    <br>
+    <br>
+    <input type='submit' ID="view"/>
+    <div id="div1">
+
+    </div>
+    <div id="d1">
+    Version(Manifest Label):<input type="text" name="version" ID="version">
+    </div>
+    <br>
+    <br>
+    <div id="d2">
+    Folder Name:<input type="text" name="name" ID="name">
+    </div>
+    <br>
+    <br>
+    <div id="d3">
+    Target Path:<input type="text" name="path" ID="path">
+    <input type='submit' ID="CheckoutSubmit"/>
+    </div>
+    <br>
+    <br>
+    <br>
+
+
+
+</form>
+
+<script>
+
+    $('form').on('submit',makeRequest);
+    function makeRequest(e){
+        e.preventDefault();
+        $.ajax({
+            url:'/checkout',
+            data: $("form").serialize(),
+            type : 'POST',
+            dataType: 'json',
+            success:function (result) {
+
+              $("#div1").html(result.success.toString());
+
+              document.getElementById('d1').style.display = "block";
+              document.getElementById('d2').style.display = "block";
+              document.getElementById('d3').style.display = "block";
+              document.getElementById('CheckoutSubmit').style.display = "block";
+              //  document.getElementById('repo').value = '';
+                document.getElementById('version').value = '';
+                document.getElementById('name').value = '';
+                document.getElementById('path').value = '';
+                if(result.status == 200){
+                    alert(result.success.toString());
+                    self.isEditMode(!self.isEditMode());
+                }
+            },
+            error: function(result){
+               alert(result.message.toString());
+            }
+        });
+    }
+
+
+
+    function onload1(){
+      document.getElementById('d1').style.display = "none";
+      document.getElementById('d2').style.display = "none";
+      document.getElementById('d3').style.display = "none";
+      document.getElementById('CheckoutSubmit').style.display = "none";
+    }
+
+    window.onload = onload1();
+</script>
+</body>
+</html>
