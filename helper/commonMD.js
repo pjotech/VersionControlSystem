@@ -301,11 +301,18 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
             fs.writeFileSync(`${targetRepo}\\Manifest\\${fileName}.txt`, buffer, function(err) {
                if (err) throw(err);
             });
-            let bufferindex =
-              "\r\n" + fileName + ":" + label1 +
-              "\r\n" + fileName + ":" + label2 +
-              "\r\n" + fileName + ":" + label3 +
-              "\r\n" + fileName + ":" + label4 + "\r\n";
+            let bufferindex = "";
+            if (label1 !== "") {
+              bufferindex = bufferindex+  "\r\n" + fileName + ":" + label1 ;
+            }  if (label2 !== "") {
+              bufferindex = bufferindex+  "\r\n" + fileName + ":" + label2 ;
+            }  if (label3 !== "") {
+              bufferindex = bufferindex+  "\r\n" + fileName + ":" + label3 ;
+            }  if (label4 !== "") {
+              bufferindex = bufferindex+  "\r\n" + fileName + ":" + label4 ;
+            }
+      
+            bufferindex = bufferindex+  "\r\n";
 
             fs.appendFile(`${targetRepo}\\Manifest\\ManifestIndex.txt`, bufferindex, function (err) {
                 if (err) throw err;

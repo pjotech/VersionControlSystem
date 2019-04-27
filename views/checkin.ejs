@@ -7,14 +7,58 @@ Priya M Joseph (priya.medackeljoseph@student.csulb.edu)
 Sujata Patil (sujata.patil@student.csulb.edu)-->
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='UTF-8'>
     <title>Form page</title>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
-
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <style>
-        input[type=button], input[type=submit], input[type=reset] {
-            background-color: #00B7FF;
+        .split {
+            height: 100%;
+            width: 65%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+            align-items: center;
+        }
+
+        /* Control the left side */
+        .left {
+            left: 40;
+            background-color: black;
+        }
+
+        /* Control the right side */
+        .right {
+            right: 0;
+
+        }
+
+        .divstyle {
+            position: absolute;
+            top: 40%;
+            right: 0%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            border-style: solid;
+            border-color: grey;
+            border-radius: 10px;
+            border-width: 2px;
+            padding: 80px;
+            padding-right: 150px;
+            padding-left: 150px;
+            margin-top: 20px;
+        }
+
+        input[type=button],
+        input[type=submit],
+        input[type=reset] {
+            background-color: black;
             border: none;
             color: white;
             padding: 16px 32px;
@@ -24,104 +68,165 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
             border-radius: 10px;
             width: 200px;
         }
-        input{
-            margin:20px;
-            padding:10px;
+
+        input {
+            margin: 20px;
+            padding: 10px;
         }
+
         input[type=”text”],
         textarea {
-            width:200px;
-            margin:5px;
-            padding:5px;
-            height:30px;
+            width: 300px;
+            margin: 5px;
+            padding: 5px;
+            height: 30px;
             display: block;
         }
-        textarea{
-            resize:none;
-            height:60px;
+
+        textarea {
+            resize: none;
+            height: 60px;
         }
-        body {
-            justify-content: center;
-            text-align: center;
-            border-color: black;
-            border-width: 2px;
-            border-style: solid;
-            border-radius: 5px;
-            padding:30px;
-            margin-top:20px ;
-            margin-left: 250px;
-            margin-right: 250px;
+
+        label {
+            color: black;
+            font-size: 20px;
         }
+
+        /* 
+            body {
+
+                    justify-content: center;
+
+                    text-align: center;
+
+                    border-color: black;
+
+                    border-width: 2px;
+
+                    border-style: solid;
+
+                    border-radius: 5px;
+
+                    padding: 30px;
+
+                    margin-top: 20px;
+
+                    margin-left: 250px;
+
+                    margin-right: 250px;
+
+            } */
 
 
         /* selected link */
-        a:active,a:hover {
+
+        a:active,
+        a:hover {
+            border-color: white;
+            border-width: 2px;
             color: black;
         }
-        a:link, a:visited {
-            background-color: dimgrey;
+
+        a:link,
+        a:visited {
+            border-color: white;
+            border-width: 2px;
+            border-style: solid;
             color: white;
             padding: 15px 25px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             border-radius: 10px;
+            transform: scaleX(1);
         }
     </style>
 </head>
+
 <body>
-<div></div>
+    <div class="split left" style="width: 30%;">
+        <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
 
-<form action='/checkin' method='POST' enctype="multipart/form-data">
-    <h1>Commit Files</h1>
+            <h1 style="color: white">AKP VCS</h1><br><br><br>
+            <a href="/"><i class="fas fa-home" style="color: white;padding-right: 15px"></i>Home</a><br><br>
+            <a href="/create"><i class="far fa-plus-square" style="color: white;padding-right: 15px"></i>Create
+                Repository</a><br><br>
+            <a href="/checkin"><i class="fas fa-upload" style="color: white;padding-right: 15px"></i>Checkin</a><br><br>
+            <a href="/checkout" class="active"><i class="fas fa-download"
+                    style="color: white;padding-right: 15px"></i>Checkout</a><br><br>
 
-    <a href="/">Home</a>
-    <a href="/create">Create</a>
+        </div>
+    </div>
 
-    <a href="/checkin">Checkin</a>
-    <a href="/checkout">Checkout</a>
-    <br>
-    <br>
-    Source Path:<input type="text" name="srcpath" ID='srcpath'><br>
-    Label1:<input type="text" name="l1" ID="lbl1"><br>
-    Label2:<input type="text" name="l2" ID="lbl2"><br>
-    Label3:<input type="text" name="l3" ID="lbl3"><br>
-    Label4:<input type="text" name="l4" ID="lbl4"><br>
-    Target Path:<input type="text" name="trgt" ID="trgt"><br>
-    <br>
-    <br>
+    <section class="split right" style="justify-content: center">
+        <div class="" style="justify-content: center">
+
+            <form action='/checkin' method='POST' enctype="multipart/form-data">
+                <h1 style="color: black">CheckIn</h1>
+                <br>
+
+                <table>
+                    <tr>
+                        <th><label>Source Path:</label></th>
+                        <th><input type="text" name="srcpath" ID='srcpath'></th>
+                    </tr>
+                    <tr>
+                        <th><label>Label1:</label></th>
+                        <th><input type="text" name="l1" ID="lbl1"></th>
+                    </tr>
+                    <tr>
+                        <th><label>Label2:</label></th>
+                        <th><input type="text" name="l2" ID="lbl2"></th>
+                    </tr>
+                    <tr>
+                        <th><label>Label3:</label></th>
+                        <th><input type="text" name="l3" ID="lbl3"></th>
+                    </tr>
+                    <tr>
+                        <th><label>Label4:</label></th>
+                        <th><input type="text" name="l4" ID="lbl4"></th>
+                    </tr>
+                    <tr>
+                        <th><label>Target Path:</label></th>
+                        <th><input type="text" name="trgt" ID="trgt"><br></th>
+                    </tr>
+                </table>
 
 
-    <input type='submit'/>
-</form>
+                <input type='submit' />
+            </form>
+        </div>
+    </section>
+    <script>
 
-<script>
+        $('form').on('submit', makeRequest);
+        function makeRequest(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/checkin',
+                data: $("form").serialize(),
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
 
-    $('form').on('submit',makeRequest);
-    function makeRequest(e){
-        e.preventDefault();
-        $.ajax({
-            url:'/checkin',
-            data: $("form").serialize(),
-            type : 'POST',
-            dataType: 'json',
-            success:function (result) {
-
-                alert("Files Committed");
-                document.getElementById('srcpath').value = '';
-                document.getElementById('lbl1').value = '';
-                document.getElementById('lbl2').value = '';
-                document.getElementById('lbl3').value = '';
-                document.getElementById('lbl4').value = '';
-                if(result.status == 200){
-                    self.isEditMode(!self.isEditMode());
+                    alert("Files Committed");
+                    document.getElementById('srcpath').value = '';
+                    document.getElementById('lbl1').value = '';
+                    document.getElementById('lbl2').value = '';
+                    document.getElementById('lbl3').value = '';
+                    document.getElementById('lbl4').value = '';
+                    document.getElementById('trgt').value = '';
+                    if (result.status == 200) {
+                        self.isEditMode(!self.isEditMode());
+                    }
+                },
+                error: function (result) {
+                    alert(result.message.toString());
                 }
-            },
-            error: function(result){
-               alert(result.message.toString());
-            }
-        });
-    }
-</script>
+            });
+        }
+    </script>
 </body>
+
 </html>

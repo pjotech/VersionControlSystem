@@ -20,219 +20,239 @@ Sujata Patil (sujata.patil@student.csulb.edu
 
 <head>
 
-                <meta charset='UTF-8'>
-
-                <title>Form page</title>
-
-                <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
-
-                <link rel="stylesheet" type="text/css">
-
-                <style>
-
-                                input[type=button], input[type=submit], input[type=reset] {
-
-                                                background-color: #00B7FF;
-
-                                                border: none;
-
-                                                color: white;
-
-                                                padding: 16px 32px;
-
-                                                text-decoration: none;
-
-                                                margin: 4px 2px;
-
-                                                cursor: pointer;
-
-                                                border-radius: 10px;
-
-                                                width: 200px;
-
-                                }
-
-                                input{
-
-                                                margin:20px;
-
-                                                padding:10px;
-
-                                }
-
-                                input[type=”text”],
-
-                                textarea {
-
-                                                width:200px;
-
-                                                margin:5px;
-
-                                                padding:5px;
-
-                                                height:30px;
-
-                                                display: block;
-
-                                }
-
-                                textarea{
-
-                                                resize:none;
-
-                                                height:60px;
-
-                                }
-
-                                body {
-
-                                                justify-content: center;
-
-                                                text-align: center;
-
-                                                border-color: black;
-
-                                                border-width: 2px;
-
-                                                border-style: solid;
-
-                                                border-radius: 5px;
-
-                                                padding:30px;
-
-                                                margin-top:20px ;
-
-                                                margin-left: 250px;
-
-                                                margin-right: 250px;
-
-                                }
-
-
-
-
-
-                                /* selected link */
-
-                                a:active,a:hover {
-
-                                                color: black;
-
-                                }
-
-                                a:link, a:visited {
-
-                                                background-color: dimgrey;
-
-                                                color: white;
-
-                                                padding: 15px 25px;
-
-                                                text-align: center;
-
-                                                text-decoration: none;
-
-                                                display: inline-block;
-
-                                                border-radius: 10px;
-
-                                }
-
-                </style>
-
-</head>
-
-<body >
-
-<form method="POST" action="/createRepo" enctype="multipart/form-data">
-
-
-
-                <h1>Create Repository</h1>
-
-                <a href="/">Home</a>
-
-    <a href="/create">Create</a>
-
-
-
-                <a href="/checkin">Checkin</a>
-
-                <a href="/checkout">Checkout</a>
-
-
-
-        <br>
-
-        <br>
-
-                Repository Name:<input type="text" name="name" ID="name">
-
-                <br>
-
-                Target Path:<input type="text" name="path" ID="path"><br>
-
-                <br>
-
-                <br>
-
-                <input type="submit" value="Submit" ><br>
-
-
-
-    </form>
-
-
-
-<script>
-
-
-
-                $('form').on('submit',makeRequest);
-
-                function makeRequest(e){
-
-                                e.preventDefault();
-
-                                $.ajax({
-
-                                                url:'/createRepo',
-
-                                                data: $("form").serialize(),
-
-                                                type : 'POST',
-
-                                                dataType: 'json',
-
-                                                success:function (result) {
-
-
-
-                                                                alert(result.success.toString());
-
-                                                                document.getElementById('name').value = '';
-
-                                                                document.getElementById('path').value = '';
-
-                                                                if(result.status == 200){
-
-                                                                                self.isEditMode(!self.isEditMode());
-
-                                                                }
-
-                                                },
-
-                                                error: function(result){
-
-                                                                alert(result.message.toString());
-
-                                                }
-
-                                });
+        <meta charset='UTF-8'>
+
+        <title>Form page</title>
+
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+        <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+                integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+                crossorigin="anonymous">
+        <style>
+                .split {
+                        height: 100%;
+                        width: 65%;
+                        position: fixed;
+                        z-index: 1;
+                        top: 0;
+                        overflow-x: hidden;
+                        padding-top: 20px;
+                        align-items: center;
+                }
+
+                /* Control the left side */
+                .left {
+                        left: 40;
+                        background-color: black;
+                }
+
+                /* Control the right side */
+                .right {
+                        right: 0;
 
                 }
 
-</script>
+                .divstyle {
+                        position: absolute;
+                        top: 40%;
+                        right: 0%;
+                        transform: translate(-50%, -50%);
+                        text-align: center;
+                        border-style: solid;
+                        border-color: grey;
+                        border-radius: 10px;
+                        border-width: 2px;
+                        padding: 80px;
+                        padding-right: 150px;
+                        padding-left: 150px;
+                        margin-top: 20px;
+                }
+
+                input[type=button],
+                input[type=submit],
+                input[type=reset] {
+                        background-color: black;
+                        border: none;
+                        color: white;
+                        padding: 16px 32px;
+                        text-decoration: none;
+                        margin: 4px 2px;
+                        cursor: pointer;
+                        border-radius: 10px;
+                        width: 200px;
+                }
+
+                input {
+                        margin: 20px;
+                        padding: 10px;
+                }
+
+                input[type=”text”],
+                textarea {
+                        width: 300px;
+                        margin: 5px;
+                        padding: 5px;
+                        height: 30px;
+                        display: block;
+                }
+
+                textarea {
+                        resize: none;
+                        height: 60px;
+                }
+
+                label {
+                        color: black;
+                        font-size: 20px;
+                }
+
+                /* 
+                body {
+
+                        justify-content: center;
+
+                        text-align: center;
+
+                        border-color: black;
+
+                        border-width: 2px;
+
+                        border-style: solid;
+
+                        border-radius: 5px;
+
+                        padding: 30px;
+
+                        margin-top: 20px;
+
+                        margin-left: 250px;
+
+                        margin-right: 250px;
+
+                } */
+
+
+                /* selected link */
+
+                a:active,
+                a:hover {
+                        border-color: white;
+                        border-width: 2px;
+                        color: black;
+                }
+
+                a:link,
+                a:visited {
+                        border-color: white;
+                        border-width: 2px;
+                        border-style: solid;
+                        color: white;
+                        padding: 15px 25px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: inline-block;
+                        border-radius: 10px;
+                        transform: scaleX(1);
+                }
+        </style>
+
+</head>
+
+<body>
+
+        <div class="split left" style="width: 30%;">
+                <div
+                        style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+
+                        <h1 style="color: white">AKP VCS</h1><br><br><br>
+                        <a href="/"><i class="fas fa-home" style="color: white;padding-right: 15px"></i>Home</a><br><br>
+                        <a href="/create" class="active"><i class="far fa-plus-square"
+                                        style="color: white;padding-right: 15px"></i>Create Repository</a><br><br>
+                        <a href="/checkin"><i class="fas fa-upload"
+                                        style="color: white;padding-right: 15px"></i>Checkin</a><br><br>
+                        <a href="/checkout"><i class="fas fa-download"
+                                        style="color: white;padding-right: 15px"></i>Checkout</a><br><br>
+
+                </div>
+        </div>
+        <section class="split right" style="justify-content: center">
+                <div class="" style="justify-content: center">
+                        <form method="POST" enctype="multipart/form-data" action="/createrepo">
+
+
+                                <h1 style="color: black">Create Repository</h1>
+                                <br>
+
+                                <table>
+                                        <tr>
+                                                <th><label>Name:</label></th>
+                                                <th><input type="text" name="name" ID="name"></th>
+                                        </tr>
+
+                                        <tr>
+                                                <th><label>Target Path:</label></th>
+                                                <th><input type="text" name="path" ID="path"><br></th>
+                                        </tr>
+
+                                </table>
+                                <br>
+
+                                <br>
+                                <input type="submit" name="create" value="Submit"><br>
+
+
+                        </form>
+                </div>
+        </section>
+
+
+        <script>
+
+              
+
+                $('form').on('submit', makeRequest);
+
+                function makeRequest(e) {
+
+                        e.preventDefault();
+
+                        $.ajax({
+
+                                url: '/createRepo',
+
+                                data: $("form").serialize(),
+
+                                type: 'POST',
+
+                                dataType: 'json',
+
+                                success: function (result) {
+                                        alert(result.success.toString())
+
+                                        document.getElementById('name').value = '';
+
+                                        document.getElementById('path').value = '';
+
+                                        if (result.status == 200) {
+
+                                                self.isEditMode(!self.isEditMode());
+
+                                        }
+
+                                },
+
+                                error: function (result) {
+
+                                        alert(result.message.toString());
+
+                                }
+
+                        });
+
+                }
+
+        </script>
 
 </body>
 

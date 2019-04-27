@@ -18,14 +18,14 @@ let manifestFilename = "";
 
 //API
 router.get('/', function (req, res) {
-    res.render('index', {
+  res.render('index', {
     title: ''
   });
 });
 
 //--------------------------- for creating the project structure------------------------------
 router.get('/create', function (req, res) {
-    res.render('create', {
+  res.render('create', {
     title: ''
   });
 });
@@ -48,14 +48,14 @@ router.get('/checkout', function (req, res) {
   });
 });
 // --------------------------------manifest file listing-------------------------
-router.post('/viewprojects',function(req,res){
+router.post('/viewprojects', function (req, res) {
 
-    //res.send('{"success" : "Updated Successfully", "status" : 200}');
+  //res.send('{"success" : "Updated Successfully", "status" : 200}');
 
 });
 // --------------------------------REpository creation ----------------------------------------
 router.post('/createRepo', function (req, res) {
-   if (!fs.existsSync(req.body.path + `\\${req.body.name}`))
+  if (!fs.existsSync(req.body.path + `\\${req.body.name}`))
     fs.mkdir(req.body.path + `\\${req.body.name}`, { recursive: true }, (err) => {
       if (err) throw err;
       res.end('{"success" : "Repository created", "status" : 200}');
@@ -113,13 +113,13 @@ router.post('/checkin', function (req, res) {
   let label3 = req.body.l3;
   let label4 = req.body.l4;
   let fileName = "";
-    if (label1 !== "") {
+  if (label1 !== "") {
     fileName = 'manifest-' + label1 + 'name';
-  }else if (label2 !== "") {
+  } else if (label2 !== "") {
     fileName = 'manifest-' + label2 + 'name';
-  }else if (label3 !== "") {
+  } else if (label3 !== "") {
     fileName = 'manifest-' + label3 + 'name';
-  }else if (label4 !== "") {
+  } else if (label4 !== "") {
     fileName = 'manifest-' + label4 + 'name';
   }
 
@@ -164,98 +164,113 @@ router.post('/checkin', function (req, res) {
 // --------------------------------checkout button click ----------------------------------------
 router.post('/checkout', function (req, res) {
 
-if(req.body.path === ""){
-  //console.log(req.body.repo);
-  let ph="";
+  if (req.body.path === "") {
+    //console.log(req.body.repo);
+    let ph = "";
 
     let path = req.body.repo;
     var liner = new readlines(`${req.body.repo}\\Manifest\\ManifestIndex.txt`);
 
-      var next;
-      let lineNumber = 0;
-      while (next = liner.next()) {
-      ph=ph+"<div class='button'>"+next.toString('ascii')+"<br></div>";
-    }
-    //  console.log(ph);
-      res.send({"success":ph});
-}else {
-  if (!fs.existsSync(req.body.path + `\\${req.body.name}`)) {
-    fs.mkdir(req.body.path + `\\${req.body.name}`, { recursive: true }, (err) => {
-      if (err) throw err;
+    var next;
+    let lineNumber = 0;
 
-      const file_filter = req.body.version;
-      var liner = new readlines(`${req.body.repo}\\Manifest\\ManifestIndex.txt`);
-      var repopath = req.body.repo;
-      var next;
-      const regex = new RegExp(file_filter);
-      let version = req.body.name + "_CheckoutManifest" + req.body.version + ".txt";
-      let lineNumber = 0;
-      while (next = liner.next()) {
-        // edges.push(next.toString('ascii').split(' '));
-
-
-        if (regex.test(next.toString('ascii').split(':')[1])) {
-                    manifestFilename = `${req.body.repo}\\Manifest\\${next.toString('ascii').split(':')[0]}.txt`;
-                  }
-        //console.log('Line ' + lineNumber + ': ' + next.toString('ascii'));
-        lineNumber++;
+    ph = ph + "<tr>";
+    ph = ph + "<th>FileName</th>";
+    ph = ph + "<th>Label</th>";
+    ph = ph + "</tr>";
+    while (next = liner.next()) {
+      console.log(next.toString());
+      if (next.toString() != "") {
+        if (next.toString('ascii').split(":")[1] != "") {
+          ph = ph + "<tr>";
+          ph = ph + "<td>" + next.toString('ascii').split(":")[0] + "</td>";
+          if (next.toString('ascii').split(":")[1] !== undefined)
+            ph = ph + "<td>" + next.toString('ascii').split(":")[1] + "</td>";
+          ph = ph + "</tr>";
+        }
       }
 
-      let destination = `${req.body.path}\\${req.body.name}`;
-      fs.readdir(req.body.path + `\\${req.body.name}`, function (err, files) {
-        if (err) {
-          console.log(err)
-        } else {
-          if (!files.length) {
+    }
+    //  console.log(ph);
+    res.send({ "success": ph });
+  } else {
+    if (!fs.existsSync(req.body.path + `\\${req.body.name}`)) {
+      fs.mkdir(req.body.path + `\\${req.body.name}`, { recursive: true }, (err) => {
+        if (err) throw err;
 
-            fs.readdir(repopath, (err, files) => {
-              files.forEach(file => {
+        const file_filter = req.body.version;
+        var liner = new readlines(`${req.body.repo}\\Manifest\\ManifestIndex.txt`);
+        var repopath = req.body.repo;
+        var next;
+        const regex = new RegExp(file_filter);
+        let version = req.body.name + "_CheckoutManifest" + req.body.version + ".txt";
+        let lineNumber = 0;
+        while (next = liner.next()) {
+          // edges.push(next.toString('ascii').split(' '));
 
-                let f = file.split('.')[1];
-                //console.log(f);
-                if (f === undefined && file !== 'Manifest') {
-                  // console.log(file);
-                  fs.mkdir(`${destination}\\${file}`, { recursive: true }, (err) => {
-                    if (err) throw err;
-                    fs.readFile(manifestFilename, function (err, data) {
-                      if (err) throw err;
-                      if (data.indexOf(`${repopath}\\${file}`) >= 0) {
-                        makeAndCopyCheckout(file, `${repopath}\\${file}`, destination, repopath, version);
-                      } else {
-                        manifestFile(`${repopath}\\${file}`, "Checkout empty folder", "", repopath, version, "", "", "", "");
-                      }
-                    });
 
-                  });
-                } else if (file !== 'Manifest') {
-
-                  fs.readdir(`${repopath}\\${file}`, (err, files) => {
-                    files.forEach(file1 => {
-
-                      copyFileCheckout(file1, `${repopath}\\${file}`, destination, repopath, version);
-                    })
-                  });
-                }
-              });
-            });
+          if (regex.test(next.toString('ascii').split(':')[1])) {
+            manifestFilename = `${req.body.repo}\\Manifest\\${next.toString('ascii').split(':')[0]}.txt`;
           }
+          //console.log('Line ' + lineNumber + ': ' + next.toString('ascii'));
+          lineNumber++;
         }
+
+        let destination = `${req.body.path}\\${req.body.name}`;
+        fs.readdir(req.body.path + `\\${req.body.name}`, function (err, files) {
+          if (err) {
+            console.log(err)
+          } else {
+            if (!files.length) {
+
+              fs.readdir(repopath, (err, files) => {
+                files.forEach(file => {
+
+                  let f = file.split('.')[1];
+                  //console.log(f);
+                  if (f === undefined && file !== 'Manifest') {
+                    // console.log(file);
+                    fs.mkdir(`${destination}\\${file}`, { recursive: true }, (err) => {
+                      if (err) throw err;
+                      fs.readFile(manifestFilename, function (err, data) {
+                        if (err) throw err;
+                        if (data.indexOf(`${repopath}\\${file}`) >= 0) {
+                          makeAndCopyCheckout(file, `${repopath}\\${file}`, destination, repopath, version);
+                        } else {
+                          manifestFile(`${repopath}\\${file}`, "Checkout empty folder", "", repopath, version, "", "", "", "");
+                        }
+                      });
+
+                    });
+                  } else if (file !== 'Manifest') {
+
+                    fs.readdir(`${repopath}\\${file}`, (err, files) => {
+                      files.forEach(file1 => {
+
+                        copyFileCheckout(file1, `${repopath}\\${file}`, destination, repopath, version);
+                      })
+                    });
+                  }
+                });
+              });
+            }
+          }
+        });
+
+
+        res.end('{"success" : "Updated Successfully", "status" : 200}');
+
+
       });
-
-
-      res.end('{"success" : "Updated Successfully", "status" : 200}');
-
-
-    });
-  }
-  else {
-    if (req.body.path !== undefined && req.body.name !== undefined) {
-      res.end('{"success" : "Folder with same name already exists!", "status" : 200}');
-    } else {
-      res.end('{"success" : "Please enter the field!", "status" : 200}');
+    }
+    else {
+      if (req.body.path !== undefined && req.body.name !== undefined) {
+        res.end('{"success" : "Folder with same name already exists!", "status" : 200}');
+      } else {
+        res.end('{"success" : "Please enter the field!", "status" : 200}');
+      }
     }
   }
-}
 
 });
 
@@ -319,7 +334,7 @@ const artifactID = (filePath) => {
 };
 
 const makeAndCopyCheckout = (file1, src, destDir, repopath, version) => {
-    let f = file1.split('.')[1];
+  let f = file1.split('.')[1];
 
   if (!fs.lstatSync(destDir + "\\" + file1).isDirectory()) {
 
@@ -405,7 +420,7 @@ const makeAndCopyCheckout = (file1, src, destDir, repopath, version) => {
 };
 
 const copyFileCheckout = (file, src, dir2, repopath, version) => {
-   let fs = require('fs');
+  let fs = require('fs');
   let path = require('path');
   // console.log(`${src}\\${file}`);
 
@@ -418,7 +433,7 @@ const copyFileCheckout = (file, src, dir2, repopath, version) => {
   fs.readFile(manifestFilename, function (err, data) {
     if (err) throw err;
     if (data.indexOf(`${src}\\${file}`) >= 0) {
-           if (!fs.existsSync(`${dir2}\\${filename}`)) {
+      if (!fs.existsSync(`${dir2}\\${filename}`)) {
 
         let source = fs.createReadStream(`${src}\\${file}`);
         let dest = fs.createWriteStream(path.resolve(dir2, filename));
@@ -537,11 +552,11 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
   let fileName = "";
   if (label1 !== "") {
     fileName = 'manifest-' + label1 + 'name';
-  }else if (label2 !== "") {
+  } else if (label2 !== "") {
     fileName = 'manifest-' + label2 + 'name';
-  }else if (label3 !== "") {
+  } else if (label3 !== "") {
     fileName = 'manifest-' + label3 + 'name';
-  }else if (label4 !== "") {
+  } else if (label4 !== "") {
     fileName = 'manifest-' + label4 + 'name';
   }
 
@@ -550,27 +565,33 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
     "\r\nTimeStamp:" + formattedDate + "\r\nFilePath: " + manifestPath + "\r\n/////////////////////////////////////////////////////////////////////";
 
 
-    if (!fs.existsSync(`${targetRepo}\\Manifest\\${fileName}.txt`)){
+  if (!fs.existsSync(`${targetRepo}\\Manifest\\${fileName}.txt`)) {
 
-            fs.writeFileSync(`${targetRepo}\\Manifest\\${fileName}.txt`, buffer, function(err) {
-               if (err) throw(err);
-            });
-            let bufferindex =
-              "\r\n" + fileName + ":" + label1 +
-              "\r\n" + fileName + ":" + label2 +
-              "\r\n" + fileName + ":" + label3 +
-              "\r\n" + fileName + ":" + label4 + "\r\n";
-
-            fs.appendFile(`${targetRepo}\\Manifest\\ManifestIndex.txt`, bufferindex, function (err) {
-                if (err) throw err;
-            });
-
-    }else {
-      fs.appendFile(`${targetRepo}\\Manifest\\${version}`, buffer, function (err) {
-        if (err) throw err;
-      })
+    fs.writeFileSync(`${targetRepo}\\Manifest\\${fileName}.txt`, buffer, function (err) {
+      if (err) throw (err);
+    });
+    let bufferindex = "";
+    if (label1 !== "") {
+      bufferindex = bufferindex + "\r\n" + fileName + ":" + label1;
+    } if (label2 !== "") {
+      bufferindex = bufferindex + "\r\n" + fileName + ":" + label2;
+    } if (label3 !== "") {
+      bufferindex = bufferindex + "\r\n" + fileName + ":" + label3;
+    } if (label4 !== "") {
+      bufferindex = bufferindex + "\r\n" + fileName + ":" + label4;
     }
- };
+
+    bufferindex = bufferindex + "\r\n";
+    fs.appendFile(`${targetRepo}\\Manifest\\ManifestIndex.txt`, bufferindex, function (err) {
+      if (err) throw err;
+    });
+
+  } else {
+    fs.appendFile(`${targetRepo}\\Manifest\\${version}`, buffer, function (err) {
+      if (err) throw err;
+    })
+  }
+};
 
 
 module.exports = router;

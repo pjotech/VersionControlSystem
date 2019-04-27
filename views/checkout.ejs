@@ -1,5 +1,6 @@
 <!--Design for committing files to repository -->
 <!--@author
+    checkout
 Aanchal Tandel (aanchalmanharbhai.tandel@student.csulb.edu)
 Krishna Desai (krishna.desai@student.csulb.edu)
 Nithin Reddy Allala (nithinreddy.allala@student.csulb.edu)
@@ -8,13 +9,61 @@ Sujata Patil (sujata.patil@student.csulb.edu
 )-->
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='UTF-8'>
     <title>Form page</title>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+    <link href="css/addons/datatables.min.css" rel="stylesheet">
+    <!-- MDBootstrap Datatables  -->
+<script type="text/javascript" src="js/addons/datatables.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <style>
-        input[type=button], input[type=submit], input[type=reset] {
-            background-color: #00B7FF;
+        .split {
+            height: 100%;
+            width: 65%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+            align-items: center;
+        }
+
+        /* Control the left side */
+        .left {
+            left: 40;
+            background-color: darkseagreen
+        }
+
+        /* Control the right side */
+        .right {
+            right: 0;
+
+        }
+
+        .divstyle {
+            position: absolute;
+            top: 40%;
+            right: 0%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            border-style: solid;
+            border-color: grey;
+            border-radius: 10px;
+            border-width: 2px;
+            padding: 80px;
+            padding-right: 150px;
+            padding-left: 150px;
+            margin-top: 20px;
+        }
+
+        input[type=button],
+        input[type=submit],
+        input[type=reset] {
+            background-color: black;
             border: none;
             color: white;
             padding: 16px 32px;
@@ -24,135 +73,330 @@ Sujata Patil (sujata.patil@student.csulb.edu
             border-radius: 10px;
             width: 200px;
         }
-        input{
-            margin:20px;
-            padding:10px;
+
+        input {
+            margin: 20px;
+            padding: 10px;
         }
+
         input[type=”text”],
         textarea {
-            width:200px;
-            margin:5px;
-            padding:5px;
-            height:30px;
+            width: 300px;
+            margin: 5px;
+            padding: 5px;
+            height: 30px;
             display: block;
         }
-        textarea{
-            resize:none;
-            height:60px;
+
+        textarea {
+            resize: none;
+            height: 60px;
         }
-        body {
-            justify-content: center;
-            text-align: center;
-            border-color: black;
-            border-width: 2px;
-            border-style: solid;
-            border-radius: 5px;
-            padding:30px;
-            margin-top:20px ;
-            margin-left: 250px;
-            margin-right: 250px;
+
+        label {
+            color: black;
+            font-size: 20px;
         }
+
+        /* 
+            body {
+
+                    justify-content: center;
+
+                    text-align: center;
+
+                    border-color: black;
+
+                    border-width: 2px;
+
+                    border-style: solid;
+
+                    border-radius: 5px;
+
+                    padding: 30px;
+
+                    margin-top: 20px;
+
+                    margin-left: 250px;
+
+                    margin-right: 250px;
+
+            } */
 
 
         /* selected link */
-        a:active,a:hover {
+
+        a:active,
+        a:hover {
+            border-color: white;
+            border-width: 2px;
             color: black;
         }
-        a:link, a:visited {
-            background-color: dimgrey;
+
+        a:link,
+        a:visited {
+            border-color: white;
+            border-width: 2px;
+            border-style: solid;
             color: white;
             padding: 15px 25px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             border-radius: 10px;
+            transform: scaleX(1);
         }
+
+        #mytable {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 90%;
+            margin-right: 10px
+        }
+
+        #mytable td,
+        #mytable th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #mytable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #mytable tr:hover {
+            background-color: #ddd;
+        }
+
+        #mytable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: darkseagreen;
+            color: white;
+        }
+
+        .pagination {
+  display: inline-block;
+}
+
+.pagination li {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+  border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
     </style>
+
 </head>
+
 <body>
-<div></div>
+    <div class="split left" style="width: 30%;">
+        <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
 
-<form action='/checkout' method='POST' enctype="multipart/form-data">
-    <h1>Commit Files</h1>
+            <h1 style="color: white">AKP VCS</h1><br><br><br>
+            <a href="/"><i class="fas fa-home" style="color: white;padding-right: 15px"></i>Home</a><br><br>
+            <a href="/create"><i class="far fa-plus-square" style="color: white;padding-right: 15px"></i>Create
+                Repository</a><br><br>
+            <a href="/checkin"><i class="fas fa-upload" style="color: white;padding-right: 15px"></i>Checkin</a><br><br>
+            <a href="/checkout" class="active"><i class="fas fa-download"
+                    style="color: white;padding-right: 15px"></i>Checkout</a><br><br>
 
-    <a href="/">Home</a>
-    <a href="/create">Create</a>
-    <a href="/checkin">Checkin</a>
-    <a href="/checkout">Checkout</a>
-    <br>
-    <br>
-    Repository (Repository path):<input type="text" name="repo" ID="repo">
-    <br>
-    <br>
-    <input type='submit' ID="view"/>
-    <div id="div1">
-
+        </div>
     </div>
-    <div id="d1">
-    Version(Manifest Label):<input type="text" name="version" ID="version">
-    </div>
-    <br>
-    <br>
-    <div id="d2">
-    Folder Name:<input type="text" name="name" ID="name">
-    </div>
-    <br>
-    <br>
-    <div id="d3">
-    Target Path:<input type="text" name="path" ID="path">
-    <input type='submit' ID="CheckoutSubmit"/>
-    </div>
-    <br>
-    <br>
-    <br>
 
 
+    <section class="split right" style="justify-content: center">
+        <div class="" style="justify-content: center">
+            <form action='/checkout' method='POST' enctype="multipart/form-data">
 
-</form>
+                <h1 style="color: black">CheckOut</h1>
+                <br>
 
-<script>
+                <table >
+                    <tr>
+                        <th><label>Repository (Repository path):</label></th>
+                        <th><input type="text" name="repo" ID="repo"></th>
+                    </tr>
+                </table>
+                <br>
+                <br>
+                <input type='submit' ID="view" />
+                <table id="mytable" class="table table-striped table-bordered table-sm">
 
-    $('form').on('submit',makeRequest);
-    function makeRequest(e){
-        e.preventDefault();
-        $.ajax({
-            url:'/checkout',
-            data: $("form").serialize(),
-            type : 'POST',
-            dataType: 'json',
-            success:function (result) {
 
-              $("#div1").html(result.success.toString());
+                </table>
+                <div class='pagination-container' style="align-content: center;" id="pagi">
+                    <nav>
+                      <ul class="pagination">
+                
+                <li data-page="prev" class="pagination">
+                                         <span> < <span class="sr-only">(current)</span></span>
+                                        </li>
+                       <!--	Here the JS Function Will Add the Rows -->
+            <li data-page="next" id="prev" class="pagination">
+                                           <span> > <span class="sr-only">(current)</span></span>
+                                        </li>
+                      </ul>
+                    </nav>
+                </div>
+                <table id="table">
 
-              document.getElementById('d1').style.display = "block";
-              document.getElementById('d2').style.display = "block";
-              document.getElementById('d3').style.display = "block";
-              document.getElementById('CheckoutSubmit').style.display = "block";
-              //  document.getElementById('repo').value = '';
-                document.getElementById('version').value = '';
-                document.getElementById('name').value = '';
-                document.getElementById('path').value = '';
-                if(result.status == 200){
-                    alert(result.success.toString());
-                    self.isEditMode(!self.isEditMode());
+                    <tr>
+                        <th><label>Version(Manifest Label):</label></th>
+                        <th><input type="text" name="version" ID="version"></th>
+                    </tr>
+                    <tr>
+                        <th><label>Folder Name:</label></th>
+                        <th><input type="text" name="name" ID="name"></th>
+                    </tr>
+                    <tr>
+                        <th><label> Target Path:</label></th>
+                        <th><input type="text" name="path" ID="path"></th>
+                    </tr>
+
+
+                </table>
+                <div id="checkoutsubmit">
+                    <input type='submit' ID="CheckoutSubmit" />
+                </div>
+                <br>
+                <br>
+                <br>
+            </form>
+        </div>
+
+    </section>
+    <script>
+
+
+        $('form').on('submit', makeRequest);
+        function makeRequest(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/checkout',
+                data: $("form").serialize(),
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
+
+                  
+                    $("#mytable").append(result.success);
+                    getPagination('#mytable');
+                    document.getElementById('checkoutsubmit').style.display = "block";
+                    document.getElementById('table').style.display = "block";
+                    document.getElementById('pagi').style.display = "block";
+                    document.getElementById('view').style.display = "none";
+                    //  document.getElementById('repo').value = '';
+                    document.getElementById('version').value = '';
+                    document.getElementById('name').value = '';
+                    document.getElementById('path').value = '';
+                    if (result.status === 200) {
+                        alert(result.success.toString());
+                        self.isEditMode(!self.isEditMode());
+                    }
+                },
+                error: function (result) {
+                    alert(result.message.toString());
                 }
-            },
-            error: function(result){
-               alert(result.message.toString());
-            }
-        });
-    }
+            });
+        }
 
 
 
-    function onload1(){
-      document.getElementById('d1').style.display = "none";
-      document.getElementById('d2').style.display = "none";
-      document.getElementById('d3').style.display = "none";
-      document.getElementById('CheckoutSubmit').style.display = "none";
-    }
+        function onload1() {
+            document.getElementById('checkoutsubmit').style.display = "none";
+            document.getElementById('table').style.display = "none";
+            document.getElementById('pagi').style.display = "none";
+        }
 
-    window.onload = onload1();
-</script>
+        window.onload = onload1();
+
+
+        getPagination('#mytable');
+				
+		 
+	function getPagination (table){
+        var maxRows = 9;
+        		var lastPage = 1 ; 
+
+         $('.pagination').find("li").slice(1, -1).remove();
+		  	var trnum = 0 ;									// reset tr counter 
+		 
+		  		$('.pagination').show();
+		  
+
+		  	var totalRows = $(table+' tbody tr').length;		// numbers of rows 
+			 $(table+' tr:gt(0)').each(function(){			// each TR in  table and not the header
+			 	trnum++;									// Start Counter 
+			 	if (trnum > maxRows ){						// if tr number gt maxRows
+			 		
+			 		$(this).hide();							// fade it out 
+			 	}if (trnum <= maxRows ){$(this).show();}// else fade in Important in case if it ..
+			 });											//  was fade out to fade it in 
+			 if (totalRows > maxRows){						// if tr total rows gt max rows option
+			 	var pagenum = Math.ceil(totalRows/maxRows);	// ceil total(rows/maxrows) to get ..  
+			 												//	numbers of pages 
+			 	for (var i = 1; i <= pagenum ;){			// for each page append pagination li 
+			 	$('.pagination #prev').before('<li data-page="'+i+'">\
+								      <span>'+ i++ +'<span class="sr-only">(current)</span></span>\
+								    </li>').show();
+			 	}											// end for i 
+			} 												// end if row count > max rows
+			$('.pagination [data-page="1"]').addClass('active'); // add active class to the first li 
+			$('.pagination li').on('click',function(evt){		// on click each page
+				evt.stopImmediatePropagation();
+				evt.preventDefault();
+				var pageNum = $(this).attr('data-page');	// get it's number
+
+						// get Max Rows from select option
+
+				if(pageNum == "prev" ){
+					if(lastPage == 1 ){return;}
+					pageNum  = --lastPage ; 
+				}
+				if(pageNum == "next" ){
+					if(lastPage == ($('.pagination li').length -2) ){return;}
+					pageNum  = ++lastPage ; 
+				}
+
+				lastPage = pageNum ;
+				var trIndex = 0 ;							// reset tr counter
+				$('.pagination li').removeClass('active');	// remove active class from all li 
+				$('.pagination [data-page="'+lastPage+'"]').addClass('active');// add active class to the clicked 
+				// $(this).addClass('active');					// add active class to the clicked 
+				 $(table+' tr:gt(0)').each(function(){		// each tr in table not the header
+				 	trIndex++;								// tr index counter 
+				 	// if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+				 	if (trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+				 		$(this).hide();		
+				 	}else {$(this).show();} 				//else fade in 
+				 }); 										// end of for each tr in table
+					});										// end of on click pagination list
+
+	
+
+										
+	}	
+
+
+
+
+
+
+
+
+    </script>
 </body>
+
 </html>
