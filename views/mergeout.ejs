@@ -163,35 +163,28 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
     <section class="split right" style="justify-content: center">
         <div class="" style="justify-content: center">
 
-            <form action='/checkin' method='POST' enctype="multipart/form-data">
-                <h1 style="color: black">CheckIn</h1>
+            <form action='/mergeout' method='POST' enctype="multipart/form-data">
+                <h1 style="color: black">Merge Out</h1>
                 <br>
 
                 <table>
+                    <tr>
+                        <th><label>Repository Path:</label></th>
+                        <th><input type="text" name="repopath" ID="repopath"></th>
+                    </tr>
                     <tr>
                         <th><label>Source Path:</label></th>
                         <th><input type="text" name="srcpath" ID='srcpath'></th>
                     </tr>
                     <tr>
-                        <th><label>Label1:</label></th>
-                        <th><input type="text" name="l1" ID="lbl1"></th>
-                    </tr>
-                    <tr>
-                        <th><label>Label2:</label></th>
-                        <th><input type="text" name="l2" ID="lbl2"></th>
-                    </tr>
-                    <tr>
-                        <th><label>Label3:</label></th>
-                        <th><input type="text" name="l3" ID="lbl3"></th>
-                    </tr>
-                    <tr>
-                        <th><label>Label4:</label></th>
-                        <th><input type="text" name="l4" ID="lbl4"></th>
-                    </tr>
-                    <tr>
                         <th><label>Target Path:</label></th>
                         <th><input type="text" name="trgt" ID="trgt"><br></th>
                     </tr>
+                    <tr>
+                        <th><label>Label:</label></th>
+                        <th><input type="text" name="l1" ID="lbl1"></th>
+                    </tr>
+
                 </table>
 
 
@@ -205,7 +198,7 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
         function makeRequest(e) {
             e.preventDefault();
             $.ajax({
-                url: '/checkin',
+                url: '/mergeout',
                 data: $("form").serialize(),
                 type: 'POST',
                 dataType: 'json',
@@ -214,9 +207,7 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
                     alert("Files Committed");
                     document.getElementById('srcpath').value = '';
                     document.getElementById('lbl1').value = '';
-                    document.getElementById('lbl2').value = '';
-                    document.getElementById('lbl3').value = '';
-                    document.getElementById('lbl4').value = '';
+                    document.getElementById('repopath').value = '';
                     document.getElementById('trgt').value = '';
                     if (result.status == 200) {
                         self.isEditMode(!self.isEditMode());

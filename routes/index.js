@@ -18,7 +18,7 @@ let manifestFilename = "";
 
 //API
 router.get('/', function (req, res) {
-  res.render('index', {
+  res.render('create', {
     title: ''
   });
 });
@@ -44,6 +44,12 @@ router.get('/checkin', function (req, res) {
 //-------------------------- for checkout-----------------------------------------
 router.get('/checkout', function (req, res) {
   res.render('checkout', {
+    title: ''
+  });
+});
+//-------------------------- for mergeout-----------------------------------------
+router.get('/mergeout', function (req, res) {
+  res.render('mergeout', {
     title: ''
   });
 });
@@ -203,7 +209,7 @@ router.post('/checkout', function (req, res) {
         var repopath = req.body.repo;
         var next;
         const regex = new RegExp(file_filter);
-        let version = req.body.name + "_CheckoutManifest" + req.body.version + ".txt";
+        let version = req.body.name + "_CheckoutManifest_" + req.body.version + ".txt";
         let lineNumber = 0;
         while (next = liner.next()) {
           // edges.push(next.toString('ascii').split(' '));
@@ -229,7 +235,7 @@ router.post('/checkout', function (req, res) {
                   let f = file.split('.')[1];
                   //console.log(f);
                   if (f === undefined && file !== 'Manifest') {
-                    // console.log(file);
+                    console.log(version);
                     fs.mkdir(`${destination}\\${file}`, { recursive: true }, (err) => {
                       if (err) throw err;
                       fs.readFile(manifestFilename, function (err, data) {

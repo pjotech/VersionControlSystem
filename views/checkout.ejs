@@ -17,7 +17,7 @@ Sujata Patil (sujata.patil@student.csulb.edu
     <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
     <link href="css/addons/datatables.min.css" rel="stylesheet">
     <!-- MDBootstrap Datatables  -->
-<script type="text/javascript" src="js/addons/datatables.min.js"></script>
+    <script type="text/javascript" src="js/addons/datatables.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <style>
@@ -178,25 +178,27 @@ Sujata Patil (sujata.patil@student.csulb.edu
         }
 
         .pagination {
-  display: inline-block;
-}
+            display: inline-block;
+        }
 
-.pagination li {
-  color: black;
-  float: left;
-  padding: 8px 16px;
-  text-decoration: none;
-  transition: background-color .3s;
-  border: 1px solid #ddd;
-}
+        .pagination li {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+        }
 
-.pagination a.active {
-  background-color: #4CAF50;
-  color: white;
-  border: 1px solid #4CAF50;
-}
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
 
-.pagination a:hover:not(.active) {background-color: #ddd;}
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
     </style>
 
 </head>
@@ -212,7 +214,8 @@ Sujata Patil (sujata.patil@student.csulb.edu
             <a href="/checkin"><i class="fas fa-upload" style="color: white;padding-right: 15px"></i>Checkin</a><br><br>
             <a href="/checkout" class="active"><i class="fas fa-download"
                     style="color: white;padding-right: 15px"></i>Checkout</a><br><br>
-
+            <a href="/mergeout" class="active"><i class="fas fa-download"
+                    style="color: white;padding-right: 15px"></i>Merge Out</a><br><br>
         </div>
     </div>
 
@@ -224,7 +227,7 @@ Sujata Patil (sujata.patil@student.csulb.edu
                 <h1 style="color: black">CheckOut</h1>
                 <br>
 
-                <table >
+                <table>
                     <tr>
                         <th><label>Repository (Repository path):</label></th>
                         <th><input type="text" name="repo" ID="repo"></th>
@@ -239,16 +242,18 @@ Sujata Patil (sujata.patil@student.csulb.edu
                 </table>
                 <div class='pagination-container' style="align-content: center;" id="pagi">
                     <nav>
-                      <ul class="pagination">
-                
-                <li data-page="prev" class="pagination">
-                                         <span> < <span class="sr-only">(current)</span></span>
-                                        </li>
-                       <!--	Here the JS Function Will Add the Rows -->
-            <li data-page="next" id="prev" class="pagination">
-                                           <span> > <span class="sr-only">(current)</span></span>
-                                        </li>
-                      </ul>
+                        <ul class="pagination">
+
+                            <li data-page="prev" class="pagination">
+                                <span>
+                                    < <span class="sr-only">(current)
+                                </span></span>
+                            </li>
+                            <!--	Here the JS Function Will Add the Rows -->
+                            <li data-page="next" id="prev" class="pagination">
+                                <span> > <span class="sr-only">(current)</span></span>
+                            </li>
+                        </ul>
                     </nav>
                 </div>
                 <table id="table">
@@ -291,7 +296,7 @@ Sujata Patil (sujata.patil@student.csulb.edu
                 dataType: 'json',
                 success: function (result) {
 
-                  
+
                     $("#mytable").append(result.success);
                     getPagination('#mytable');
                     document.getElementById('checkoutsubmit').style.display = "block";
@@ -325,70 +330,70 @@ Sujata Patil (sujata.patil@student.csulb.edu
 
 
         getPagination('#mytable');
-				
-		 
-	function getPagination (table){
-        var maxRows = 9;
-        		var lastPage = 1 ; 
 
-         $('.pagination').find("li").slice(1, -1).remove();
-		  	var trnum = 0 ;									// reset tr counter 
-		 
-		  		$('.pagination').show();
-		  
 
-		  	var totalRows = $(table+' tbody tr').length;		// numbers of rows 
-			 $(table+' tr:gt(0)').each(function(){			// each TR in  table and not the header
-			 	trnum++;									// Start Counter 
-			 	if (trnum > maxRows ){						// if tr number gt maxRows
-			 		
-			 		$(this).hide();							// fade it out 
-			 	}if (trnum <= maxRows ){$(this).show();}// else fade in Important in case if it ..
-			 });											//  was fade out to fade it in 
-			 if (totalRows > maxRows){						// if tr total rows gt max rows option
-			 	var pagenum = Math.ceil(totalRows/maxRows);	// ceil total(rows/maxrows) to get ..  
-			 												//	numbers of pages 
-			 	for (var i = 1; i <= pagenum ;){			// for each page append pagination li 
-			 	$('.pagination #prev').before('<li data-page="'+i+'">\
-								      <span>'+ i++ +'<span class="sr-only">(current)</span></span>\
+        function getPagination(table) {
+            var maxRows = 9;
+            var lastPage = 1;
+
+            $('.pagination').find("li").slice(1, -1).remove();
+            var trnum = 0;									// reset tr counter 
+
+            $('.pagination').show();
+
+
+            var totalRows = $(table + ' tbody tr').length;		// numbers of rows 
+            $(table + ' tr:gt(0)').each(function () {			// each TR in  table and not the header
+                trnum++;									// Start Counter 
+                if (trnum > maxRows) {						// if tr number gt maxRows
+
+                    $(this).hide();							// fade it out 
+                } if (trnum <= maxRows) { $(this).show(); }// else fade in Important in case if it ..
+            });											//  was fade out to fade it in 
+            if (totalRows > maxRows) {						// if tr total rows gt max rows option
+                var pagenum = Math.ceil(totalRows / maxRows);	// ceil total(rows/maxrows) to get ..  
+                //	numbers of pages 
+                for (var i = 1; i <= pagenum;) {			// for each page append pagination li 
+                    $('.pagination #prev').before('<li data-page="' + i + '">\
+								      <span>'+ i++ + '<span class="sr-only">(current)</span></span>\
 								    </li>').show();
-			 	}											// end for i 
-			} 												// end if row count > max rows
-			$('.pagination [data-page="1"]').addClass('active'); // add active class to the first li 
-			$('.pagination li').on('click',function(evt){		// on click each page
-				evt.stopImmediatePropagation();
-				evt.preventDefault();
-				var pageNum = $(this).attr('data-page');	// get it's number
+                }											// end for i 
+            } 												// end if row count > max rows
+            $('.pagination [data-page="1"]').addClass('active'); // add active class to the first li 
+            $('.pagination li').on('click', function (evt) {		// on click each page
+                evt.stopImmediatePropagation();
+                evt.preventDefault();
+                var pageNum = $(this).attr('data-page');	// get it's number
 
-						// get Max Rows from select option
+                // get Max Rows from select option
 
-				if(pageNum == "prev" ){
-					if(lastPage == 1 ){return;}
-					pageNum  = --lastPage ; 
-				}
-				if(pageNum == "next" ){
-					if(lastPage == ($('.pagination li').length -2) ){return;}
-					pageNum  = ++lastPage ; 
-				}
+                if (pageNum == "prev") {
+                    if (lastPage == 1) { return; }
+                    pageNum = --lastPage;
+                }
+                if (pageNum == "next") {
+                    if (lastPage == ($('.pagination li').length - 2)) { return; }
+                    pageNum = ++lastPage;
+                }
 
-				lastPage = pageNum ;
-				var trIndex = 0 ;							// reset tr counter
-				$('.pagination li').removeClass('active');	// remove active class from all li 
-				$('.pagination [data-page="'+lastPage+'"]').addClass('active');// add active class to the clicked 
-				// $(this).addClass('active');					// add active class to the clicked 
-				 $(table+' tr:gt(0)').each(function(){		// each tr in table not the header
-				 	trIndex++;								// tr index counter 
-				 	// if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
-				 	if (trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-				 		$(this).hide();		
-				 	}else {$(this).show();} 				//else fade in 
-				 }); 										// end of for each tr in table
-					});										// end of on click pagination list
+                lastPage = pageNum;
+                var trIndex = 0;							// reset tr counter
+                $('.pagination li').removeClass('active');	// remove active class from all li 
+                $('.pagination [data-page="' + lastPage + '"]').addClass('active');// add active class to the clicked 
+                // $(this).addClass('active');					// add active class to the clicked 
+                $(table + ' tr:gt(0)').each(function () {		// each tr in table not the header
+                    trIndex++;								// tr index counter 
+                    // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+                    if (trIndex > (maxRows * pageNum) || trIndex <= ((maxRows * pageNum) - maxRows)) {
+                        $(this).hide();
+                    } else { $(this).show(); } 				//else fade in 
+                }); 										// end of for each tr in table
+            });										// end of on click pagination list
 
-	
 
-										
-	}	
+
+
+        }
 
 
 

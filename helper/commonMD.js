@@ -89,7 +89,7 @@ const makeAndCopyCheckout = (file1, src, destDir, repopath, version) => {
 
             fs.readFile(manifestFilename, function (err, data) {
               if (err) throw err;
-
+              console.log(version);
               if (data.indexOf(src + "\\" + temp_subFolderName1) >= 0) {
 
                 fs.mkdir(destDir + "\\" + file1 + "\\" + temp_subFolderName1, { recursive: false }, (err) => {
