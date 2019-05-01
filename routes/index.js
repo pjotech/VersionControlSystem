@@ -280,6 +280,7 @@ router.post('/checkout', function (req, res) {
 
 });
 
+// --------------------------------merge out click--------------------------------------
 router.post('/mergeout', function (req, res) {
   console.log("merge out------------------------------")
   console.log(req.body.srcpath)
