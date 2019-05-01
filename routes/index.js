@@ -2,7 +2,7 @@
 /*@author
 Aanchal Tandel (aanchalmanharbhai.tandel@student.csulb.edu)
 Krishna Desai (krishna.desai@student.csulb.edu)
-Nithin Reddy Allala (nithinreddy.allala@student.csulb.edu)
+Heena Pallan(HeenaJafarali.Pallan@student.csulb.edu)
 Priya M Joseph (priya.medackeljoseph@student.csulb.edu)
 Sujata Patil (sujata.patil@student.csulb.edu
 )*/
@@ -12,15 +12,20 @@ let express = require('express');
 let router = express.Router();
 let fs = require('fs');
 let path = require('path');
-var readlines = require('n-readlines');
+let readlines = require('n-readlines');
 let manifestFilename = "";
-
+let checkOutTemp = "";
+let _ = require('lodash');
+let arr1 = [];
+let arr2 = [];
 
 //API
 router.get('/', function (req, res) {
   res.render('create', {
     title: ''
   });
+  //commonAncestor('a121','a1221','C:\\Users\\aanch\\Documents\\ASE-543\\TestRepo');
+  commonAncestor('a111','a12','C:\\Users\\aanch\\Documents\\ASE-543\\TestRepo');
 });
 
 //--------------------------- for creating the project structure------------------------------
@@ -92,7 +97,7 @@ router.post('/commit', function (req, res) {
                 fs.mkdir(`${req.body.destination}\\Manifest`, { recursive: true }, (err) => {
                   if (err) throw err;
                 });
-                helper.commitProject(req.body.src, req.body.destination, 'CreateRepoManifest.txt').then(() => {
+                commitProject(req.body.src, req.body.destination, 'CreateRepoManifest.txt').then(() => {
                   //version is to specify manifest file name for project version
                   res.end('{"success" : "Updated Successfully", "status" : 200}');
 
@@ -102,7 +107,7 @@ router.post('/commit', function (req, res) {
           });
         });
       } else {
-        helper.commitProject(req.body.src, req.body.destination, 'Version2.txt').then(() => {
+        commitProject(req.body.src, req.body.destination, 'Version2.txt').then(() => {
           //version is to specify manifest file name for project version
           res.end('{"success" : "Updated Successfully", "status" : 200}');
         });
@@ -119,14 +124,17 @@ router.post('/checkin', function (req, res) {
   let label3 = req.body.l3;
   let label4 = req.body.l4;
   let fileName = "";
+
+  checkOutTemp = path.basename(req.body.srcpath); //To identify checkout file
+
   if (label1 !== "") {
-    fileName = 'manifest-' + label1 + 'name';
+    fileName = `manifest_${checkOutTemp}_${label1}name`;
   } else if (label2 !== "") {
-    fileName = 'manifest-' + label2 + 'name';
+    fileName = `manifest_${checkOutTemp}_${label2}name`;
   } else if (label3 !== "") {
-    fileName = 'manifest-' + label3 + 'name';
+    fileName = `manifest_${checkOutTemp}_${label3}name`;
   } else if (label4 !== "") {
-    fileName = 'manifest-' + label4 + 'name';
+    fileName = `manifest_${checkOutTemp}_${label4}name`;
   }
 
   // manifestFile(spath,"checkin","","",label1,label2,label3,label4);
@@ -146,7 +154,7 @@ router.post('/checkin', function (req, res) {
                   if (err) throw err;
                 });
                 console.log(fileName);
-                helper.commitProject(req.body.srcpath, req.body.trgt, fileName + '.txt', label1, label2, label3, label4).then(() => {
+                commitProject(req.body.srcpath, req.body.trgt, fileName + '.txt', label1, label2, label3, label4).then(() => {
                   //version is to specify manifest file name for project version
                   res.end('{"success" : "Updated Successfully", "status" : 200}');
 
@@ -156,7 +164,7 @@ router.post('/checkin', function (req, res) {
           });
         });
       } else {
-        helper.commitProject(req.body.srcpath, req.body.trgt, fileName + ".txt", label1, label2, label3, label4).then(() => {
+        commitProject(req.body.srcpath, req.body.trgt, fileName + ".txt", label1, label2, label3, label4).then(() => {
           //version is to specify manifest file name for project version
           res.end('{"success" : "Updated Successfully", "status" : 200}');
         });
@@ -252,7 +260,6 @@ router.post('/checkout', function (req, res) {
 
                     fs.readdir(`${repopath}\\${file}`, (err, files) => {
                       files.forEach(file1 => {
-
                         copyFileCheckout(file1, `${repopath}\\${file}`, destination, repopath, version);
                       })
                     });
@@ -396,7 +403,7 @@ router.post('/mergeout', function (req, res) {
   }
 
 //-----------------------------Functions--------------------------------------------------------
-/*const commitProject = (src, destination, version, label1, label2, label3, label4) => {
+const commitProject = (src, destination, version, label1, label2, label3, label4) => {
 
   return new Promise(resolve => {
     if (fs.existsSync(destination))
@@ -421,7 +428,7 @@ router.post('/mergeout', function (req, res) {
       console.log("Sorry! Repository with same name already exists");
   })
 
-};*/
+};
 
 const artifactID = (filePath) => {
 
@@ -466,8 +473,6 @@ const makeAndCopyCheckout = (file1, src, destDir, repopath, version) => {
 
     fs.readdir(src, (err, files) => {
       files.forEach(file => {
-
-
 
         let temp_subFolderName1 = file;
         if (!fs.existsSync(destDir + "\\" + file1 + "\\" + temp_subFolderName1)) {
@@ -648,7 +653,7 @@ const copyFile = (file, dir2, targetRepo, version, label1, label2, label3, label
       let dest = fs.createWriteStream(path.resolve(dir2, filename));
 
       source.pipe(dest); +
-        source.on('end', function () { console.log('Succesfully copied'); });
+      source.on('end', function () { console.log('Succesfully copied'); });
       source.on('error', function (err) { console.log(err); });
 
     }
@@ -670,14 +675,15 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
   let teName = label1 + label2 + label3 + label4;
   let FileDetails_artifactID = fileartifactID; let formattedDate = Date();
   let fileName = "";
+
   if (label1 !== "") {
-    fileName = 'manifest-' + label1 + 'name';
+    fileName = `manifest_${checkOutTemp}_${label1}name`;
   } else if (label2 !== "") {
-    fileName = 'manifest-' + label2 + 'name';
+    fileName = `manifest_${checkOutTemp}_${label2}name`;
   } else if (label3 !== "") {
-    fileName = 'manifest-' + label3 + 'name';
+    fileName = `manifest_${checkOutTemp}_${label3}name`;
   } else if (label4 !== "") {
-    fileName = 'manifest-' + label4 + 'name';
+    fileName = `manifest_${checkOutTemp}_${label4}name`;
   }
 
   let buffer = "\r\ncommand : " + command + "\r\nfile particulars :" + FileDetails_artifactID +
@@ -690,6 +696,7 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
     fs.writeFileSync(`${targetRepo}\\Manifest\\${fileName}.txt`, buffer, function (err) {
       if (err) throw (err);
     });
+
     let bufferindex = "";
     if (label1 !== "") {
       bufferindex = bufferindex + "\r\n" + fileName + ":" + label1;
@@ -713,5 +720,180 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
   }
 };
 
+
+const findAllAncestor1 = (version1,repoPath) => {
+
+  maifest = findManifest(version1,repoPath);
+
+return findAncester(maifest,repoPath).then((file)=>{
+  console.log(`file1:${file}`)
+  if(file != "noAncestorFile"){
+    return findnextManifest(file,repoPath).then((file1)=>{
+      manifestFile1 = file1;
+      let namelist = file.split("_");
+      let ancestor = namelist[2];
+      arr1.push(ancestor);
+      //console.log(`arr1:${arr1}`);
+
+      let name = path.basename(manifestFile1.toString(),'.txt');
+      let namelist1 = name.split("_");
+      let verLabel1 = namelist1[2];
+      verLabel1 = verLabel1.replace('name','');
+      return findAllAncestor1(verLabel1,repoPath);
+    },(error) => {
+      console.log(error);
+    });
+  }else{
+  return ;
+  }
+  //resolve(arr1);
+});
+/*  return new Promise(resolve => {
+    return resolve(findAncester(maifest,repoPath).then((file)=>{
+      console.log(`file1:${file}`)
+      if(file != "nofile"){
+        return findnextManifest(file,repoPath).then((file1)=>{
+          manifestFile1 = file1;
+          let namelist = file.split("_");
+          let ancestor = namelist[2];
+          arr1.push(ancestor);
+          console.log(`arr1:${arr1}`);
+
+          let name = path.basename(manifestFile1.toString(),'.txt');
+          let namelist1 = name.split("_");
+          let verLabel1 = namelist1[2];
+          verLabel1 = verLabel1.replace('name','');
+          return resolve(findAllAncestor1(verLabel1,repoPath));
+        },(error) => {
+          console.log(error);
+        });
+      }else{
+      return resolve(arr1);
+      }
+      //resolve(arr1);
+    }));
+
+  })*/
+}
+
+const findAllAncestor2 = (version2,repoPath) => {
+
+  maifest = findManifest(version2,repoPath);
+  return findAncester(maifest,repoPath).then((file)=>{
+    console.log(`file2:${file}`)
+    if(file != "noAncestorFile"){
+      return findnextManifest(file,repoPath).then((file2)=>{
+        manifestFile2 = file2;
+        let namelist = file.split("_");
+        let ancestor = namelist[2];
+        arr2.push(ancestor);
+        //console.log(`arr2:${arr2}`);
+
+        let name = path.basename(manifestFile2.toString(),'.txt');
+        let namelist2 = name.split("_");
+        let verLabel2 = namelist2[2];
+        verLabel2 = verLabel2.replace('name','');
+        return findAllAncestor2(verLabel2,repoPath);
+      },(error) => {
+        console.log(error);
+      });
+    }else{
+    return;
+    }
+  });
+  /*return new Promise (resolve => {
+    findAncester(maifest).then((file)=>{
+      console.log(`file2:${file}`);
+     if(file != "nofile"){
+       findnextManifest(file).then((file1)=>{
+         manifestFile2 = file1;
+         let namelist = file.split("_");
+         let ancestor = namelist[2];
+         arr2.push(ancestor);
+         console.log(`arr2:${arr2}`);
+
+         let name = path.basename(manifestFile2.toString(),'.txt');
+         let namelist2 = name.split("_");
+         let verLabel2 = namelist2[2];
+         verLabel2 = verLabel2.replace('name','');
+         findAllAncestor2(verLabel2);
+       },(error) => {
+         console.log(error);
+       });
+     }else{
+       resolve(arr2);
+     }
+    //  resolve(arr2);
+   });
+ })*/
+}
+
+
+
+const commonAncestor = (version1,version2,repoPath) => {
+
+  return findAllAncestor1(version1,repoPath).then(()=>{
+
+  console.log('Ancestor 1 is resolved: ');
+    let headers1 = arr1;
+
+      return findAllAncestor2(version2,repoPath).then(()=>{
+        let headers2 = arr2;
+        //console.log(`arr2:${arr2}`);
+        console.log(`array here 1:${headers1},2:${headers2}`);
+        let final_ancestor = _.intersectionWith(arr1, arr2, _.isEqual);
+        console.log(`final_ancestor:${final_ancestor[0]}`)
+      });
+  });
+}
+
+const findManifest = (version,repoPath) => {
+  const file_filter = version;
+  var liner = new readlines(`${repoPath}\\Manifest\\ManifestIndex.txt`);
+  var next;
+  const regex = new RegExp(file_filter);
+//  let version = req.body.name + "_CheckoutManifest" + req.body.version + ".txt";
+  let lineNumber = 0;
+  while (next = liner.next()) {
+    if (regex.test(next.toString('ascii').split(':')[1])) {
+      manifestFilename = `${repoPath}\\Manifest\\${next.toString('ascii').split(':')[0]}.txt`;
+      return manifestFilename
+    }
+    lineNumber++;
+  }
+}
+
+const findAncester = (manifestfile,repoPath) => {
+  let name = path.basename(manifestfile,'.txt');
+  let namelist = name.split("_");
+  let ancestorlabel = namelist[1];
+  let files = fs.readdirSync(`${repoPath}\\Manifest`);
+
+return new Promise(resolve => {
+  files.forEach(file=>{
+    if(file.includes(`${ancestorlabel}_CheckoutManifest`)){
+      resolve(file);
+    }
+  })
+    resolve("noAncestorFile");
+})
+}
+
+const findnextManifest = (file,repoPath) => {
+  let name = path.basename(file,'.txt');
+  let namelist = name.split("_");
+  let verLabel = namelist[2];
+  let files = fs.readdirSync(`${repoPath}\\Manifest`);
+
+return new Promise(resolve => {
+  files.forEach(file=>{
+    if(file.includes(`_${verLabel}name`)){
+      resolve(file);
+    }
+  },()=>{
+    reject('no manifest file with name');
+  })
+})
+}
 
 module.exports = router;
