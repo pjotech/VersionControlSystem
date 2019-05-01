@@ -280,6 +280,119 @@ router.post('/checkout', function (req, res) {
 
 });
 
+router.post('/mergeout', function (req, res) {
+  console.log("merge out------------------------------")
+  console.log(req.body.srcpath)
+  console.log(req.body.lbl1)
+  console.log(req.body.repopath)
+  console.log(req.body.trgt)
+  fs.readdir(req.body.srcpath, function (err, files) {
+    let searchlabel = req.body.lbl1;
+    let repo = req.body.repopath;
+    let target = req.body.trgt;
+    let sourcepath = req.body.srcpath;
+    let manifestIndexpath = `${repo}\\Manifest\\ManifestIndex.txt`;
+    let manifestpath = `${repo}\\Manifest`;
+    let targetmanifestName = "";
+    fs.readFile(manifestIndexpath, function (err, data) {
+      if (err) {console.log(err)}
+      if (data.indexOf(`${searchlabel}`) >= 0) {
+          let dataArray = data.toString().split(/[ :\n\s+]+/) // convert file data in an array
+          const searchKeyword = `${searchlabel}`; // we are looking for a line, contains, key word 'user1' in the file
+          let lastIndex = -1; // let say, we have not found the keyword
+          console.log("dataArray"+"   " +dataArray)
+          for (let index=0; index<dataArray.length; index++) {
+              if (dataArray[index]== searchKeyword){
+                  // check if a line contains the  keyword
+              targetmanifestName = dataArray[index - 1];
+              lastIndex = index; // found a line includes a  keyword
+              break;
+              }
+          }
+      console.log("----------------------inside manifets index file-----------------------")
+      console.log(targetmanifestName);
+      }  else{}
+//    console.log("----------------------inside readfile-----------------------");console.log(manifestName);
+      targetmanifestName = `${manifestpath}\\`+targetmanifestName+`.txt`;
+      console.log(targetmanifestName);
+      fs.readFile(targetmanifestName, function (err, data) {
+        if (err) {console.log(err)}
+        let dataArray2 = data.toString().split(/[ =\n\s+]+/);
+        console.log("----------------------inside manifets  file-----------------------")
+//                     console.log("dataArray2---"+dataArray2)
+        let ManifestArtifactArray = "";let filePathManifestArray = "";let fileArray = "";
+        for (let index=0; index<dataArray2.length; index++){
+           if (dataArray2[index]== "particulars"){
+              ManifestArtifactArray = ManifestArtifactArray +" "+dataArray2[index + 1];}
+           else if (dataArray2[index]== "FilePath"){
+              filePathManifestArray = filePathManifestArray +" "+dataArray2[index + 1];
+              console.log("filePathManifestArray ----"+filePathManifestArray)
+              let choosedFileName = dataArray2[index + 1].substring(dataArray2[index + 1].lastIndexOf("\\") + 1, dataArray2[index + 1].length)
+              let temp = choosedFileName.substring(0,choosedFileName.lastIndexOf("_"))+"."+choosedFileName.substring(choosedFileName.lastIndexOf(".")+1,choosedFileName.length)
+              console.log("temp--"+temp)
+              fileArray = fileArray + " " + temp}
+        }
+        console.log("fileArray--"+fileArray)
+//                   let repo_sourcePath = `${repo}`;
+//                   console.log("To read repo")
+//                   console.log(repo_sourcePath)
+//                      fs.readdir(repo_sourcePath, function (err, data) { if (err) {console.log(err)}
+        files.forEach(file => {
+              let path = require('path');
+
+  //gets file name and adds it to dir2
+              console.log("file"+file)
+              console.log(`${sourcepath}`+"\\"+file)
+                              // console.log(__dirname  + file)
+//                               if(fileArray.indexOf(file)){
+//                                  if (err) {console.log(err)}
+//                                   console.log("file matched");
+//                                   console.log(`${repo_sourcePath}\\`+file);
+//                                   console.log(dataManifestArray)
+                                     // console.log(artifactID(`${sourcepath}`+"\\"+file));
+              artifactID(`${sourcepath}`+"\\"+file).then((artifactID) => {
+              console.log("ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")
+              if(ManifestArtifactArray.indexOf(artifactID) >= 0){
+                 console.log(file+"skip as source and target is same")}
+              else{
+                 let source_fileName = file;
+                 console.log(file+"is the source for Create MR and MT and grandma files")
+                 fs.readdir(req.body.trgt, function (err, files) {
+                   let target_fileName = file;
+                   console.log(target_fileName+"Read target directory")
+                   if(source_fileName == target_fileName){
+                     console.log("To copy--------------------")
+                     let f = path.basename(source_fileName, path.extname(source_fileName))+"_MR";console.log(f)
+                     let fT = path.basename(target_fileName, path.extname(target_fileName))+"_MT";
+                     let MR_file = f + path.extname(source_fileName);
+                     let MT_file = fT + path.extname(target_fileName);
+
+                     fs.access(`${target}`, (err) => {
+                        if(err){  // console.log(err)
+                            fs.mkdirSync(`${target}`);
+                         }
+                         copyFilewe(`${target}\\`+target_fileName, path.join(`${target}`, `${MT_file}`));
+                         copyFilewe(`${sourcepath}\\`+source_fileName, path.join(`${target}`, `${MR_file}`));
+                     });
+                   }
+                 });
+               }
+         }, (err) => {console.log(err)});
+       });
+      });
+    });
+//         }}
+  });
+
+  res.end('{"success" : "Merge out is done Successfully.Please proceed with merge in", "status" : 200}');
+  });
+
+ function copyFilewe(src, dest) {
+  let readStream = fs.createReadStream(src);
+  readStream.once('error', (err) => { console.log(err);});
+  readStream.once('end', () => {console.log('done copying');});
+  readStream.pipe(fs.createWriteStream(dest));
+  }
 
 //-----------------------------Functions--------------------------------------------------------
 /*const commitProject = (src, destination, version, label1, label2, label3, label4) => {
