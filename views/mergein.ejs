@@ -43,6 +43,7 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
             text-align: left
         }
 
+
         h1 {
 
             font-family: 'Open Sans', sans-serif;
@@ -140,11 +141,17 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
 
         /* selected link */
 
-        a:active,
-        a:hover {
+        .active{
             border-color: white;
             border-width: 2px;
             color: black;
+            background-color: white
+        }
+
+        .inactive{
+            border-color: white;
+            border-width: 2px;
+            color: white;
         }
 
         a:link,
@@ -152,7 +159,6 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
             border-color: white;
             border-width: 2px;
             border-style: solid;
-            color: white;
             padding: 15px 25px;
             text-align: center;
             text-decoration: none;
@@ -169,14 +175,14 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
 
             <h1 style="color: white">AKP VCS</h1><br><br><br>
             <!-- <a href="/"><i class="fas fa-home" style="color: white;padding-right: 15px"></i>Home</a><br><br> -->
-            <a href="/create" style="width: 150px"><i class="far fa-plus-square" style="color: white;padding-right: 15px"></i>Create
+            <a href="/create" style="width: 150px;" class="inactive"><i class="far fa-plus-square" style="color: white;padding-right: 15px"></i>Create
                 Repository</a><br><br>
-            <a href="/checkin" style="width: 150px"><i class="fas fa-upload" style="color: white;padding-right: 15px"></i>Checkin</a><br><br>
-            <a href="/checkout" style="width: 150px"><i class="fas fa-download"
+            <a href="/checkin" style="width: 150px" class="inactive"><i class="fas fa-upload" style="color: white;padding-right: 15px"></i>Checkin</a><br><br>
+            <a href="/checkout" style="width: 150px" class="inactive"><i class="fas fa-download"
                     style="color: white;padding-right: 15px"></i>Checkout</a><br><br>
-            <a href="/mergein" style="width: 150px"><i class="fas fa-upload"
-                    style="color: white;padding-right: 15px"></i>Merge In</a><br><br>
-            <a href="/mergeout" style="width: 150px"><i class="fas fa-download"
+            <a href="/mergein" style="width: 150px" class="active"><i class="fas fa-upload"
+                    style="padding-right: 15px"></i>Merge In</a><br><br>
+            <a href="/mergeout" style="width: 150px" class="inactive"><i class="fas fa-download"
                     style="color: white;padding-right: 15px"></i>Merge Out</a><br><br>
         </div>
     </div>
@@ -184,34 +190,34 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
     <section class="split right" style="justify-content: center">
         <div class="" style="justify-content: center">
 
-            <form action='/checkin' method='POST' enctype="multipart/form-data">
-                <h1 style="color: black">CheckIn</h1>
+            <form action='/mergeIn' method='POST' enctype="multipart/form-data">
+                <h1 style="color: black">Merge In</h1>
                 <br>
 
                 <table>
                     <tr>
                         <th><label>Source Path:</label></th>
-                        <th><input type="text" name="srcpath" ID='srcpath'></th>
+                        <th><input type="text" name="Msrcpath" ID='Msrcpath'></th>
                     </tr>
                     <tr>
                         <th><label>Label1:</label></th>
-                        <th><input type="text" name="l1" ID="lbl1"></th>
+                        <th><input type="text" name="ml1" ID="mlbl1"></th>
                     </tr>
                     <tr>
                         <th><label>Label2:</label></th>
-                        <th><input type="text" name="l2" ID="lbl2"></th>
+                        <th><input type="text" name="ml2" ID="mlbl2"></th>
                     </tr>
                     <tr>
                         <th><label>Label3:</label></th>
-                        <th><input type="text" name="l3" ID="lbl3"></th>
+                        <th><input type="text" name="ml3" ID="mlbl3"></th>
                     </tr>
                     <tr>
                         <th><label>Label4:</label></th>
-                        <th><input type="text" name="l4" ID="lbl4"></th>
+                        <th><input type="text" name="ml4" ID="mlbl4"></th>
                     </tr>
                     <tr>
                         <th><label>Target Path:</label></th>
-                        <th><input type="text" name="trgt" ID="trgt"><br></th>
+                        <th><input type="text" name="mtrgt" ID="mtrgt"><br></th>
                     </tr>
                 </table>
 
@@ -226,7 +232,7 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
         function makeRequest(e) {
             e.preventDefault();
             $.ajax({
-                url: '/checkin',
+                url: '/mergein',
                 data: $("form").serialize(),
                 type: 'POST',
                 dataType: 'json',
@@ -234,11 +240,11 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
 
                     alert("Files Committed");
                     document.getElementById('srcpath').value = '';
-                    document.getElementById('lbl1').value = '';
-                    document.getElementById('lbl2').value = '';
-                    document.getElementById('lbl3').value = '';
-                    document.getElementById('lbl4').value = '';
-                    document.getElementById('trgt').value = '';
+                    document.getElementById('mlbl1').value = '';
+                    document.getElementById('mlbl2').value = '';
+                    document.getElementById('mlbl3').value = '';
+                    document.getElementById('mlbl4').value = '';
+                    document.getElementById('mtrgt').value = '';
                     if (result.status == 200) {
                         self.isEditMode(!self.isEditMode());
                     }

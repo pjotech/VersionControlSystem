@@ -14,7 +14,7 @@ const commitProject = (src, destination, version, label1, label2, label3, label4
       fs.readdir(src, (err, files) => {
 
         files.forEach(file => {
-          //console.log(file);
+
           let temp_subFolderName = file;
           let destDir = `${destination}\\${temp_subFolderName}`;
           if (fs.existsSync(destDir))
@@ -22,7 +22,7 @@ const commitProject = (src, destination, version, label1, label2, label3, label4
           else
             fs.mkdir(destDir, { recursive: true }, (err) => {
               if (err) throw err;
-              //  console.log(temp_subFolderName + "Created")
+
               checkDirectory(`${src}\\${file}`, file, destination, version, label1, label2, label3, label4)
             });
         });
@@ -65,7 +65,7 @@ const artifactID = (filePath) => {
 };
 
 const makeAndCopyCheckout = (file1, src, destDir, repopath, version) => {
-    let f = file1.split('.')[1];
+  let f = file1.split('.')[1];
 
   if (!fs.lstatSync(destDir + "\\" + file1).isDirectory()) {
 
@@ -89,7 +89,7 @@ const makeAndCopyCheckout = (file1, src, destDir, repopath, version) => {
 
             fs.readFile(manifestFilename, function (err, data) {
               if (err) throw err;
-              console.log(version);
+
               if (data.indexOf(src + "\\" + temp_subFolderName1) >= 0) {
 
                 fs.mkdir(destDir + "\\" + file1 + "\\" + temp_subFolderName1, { recursive: false }, (err) => {
@@ -151,9 +151,9 @@ const makeAndCopyCheckout = (file1, src, destDir, repopath, version) => {
 };
 
 const copyFileCheckout = (file, src, dir2, repopath, version) => {
-   let fs = require('fs');
+  let fs = require('fs');
   let path = require('path');
-  // console.log(`${src}\\${file}`);
+
 
   //gets file name and adds it to dir2
   let f = path.basename(file, path.extname(file));
@@ -164,7 +164,7 @@ const copyFileCheckout = (file, src, dir2, repopath, version) => {
   fs.readFile(manifestFilename, function (err, data) {
     if (err) throw err;
     if (data.indexOf(`${src}\\${file}`) >= 0) {
-           if (!fs.existsSync(`${dir2}\\${filename}`)) {
+      if (!fs.existsSync(`${dir2}\\${filename}`)) {
 
         let source = fs.createReadStream(`${src}\\${file}`);
         let dest = fs.createWriteStream(path.resolve(dir2, filename));
@@ -233,10 +233,10 @@ const checkDirectory = (filepath, temp_subFolderName, destination, version, labe
   let targetRepo = destination;
   if (!fs.lstatSync(filepath).isDirectory()) {
     let artid = artifactID(filepath);
-    // console.log(`artifcact id: ${artid}`);
+
     copyFile(filepath, destDir, targetRepo, version, label1, label2, label3, label4);
   } else {
-    // console.log(filepath+"---sdnjs")
+
     makeandcopy(filepath, temp_subFolderName, destDir, targetRepo, version, label1, label2, label3, label4)
 
   }
@@ -251,15 +251,17 @@ const copyFile = (file, dir2, targetRepo, version, label1, label2, label3, label
   let f = path.basename(file, path.extname(file));
   artifactID(file).then((artifactID) => {
     let filename = f + "_" + artifactID + path.extname(file);
-    // console.log(`artifactID: ${artifactID}`);
+
 
     if (!fs.existsSync(`${dir2}\\${filename}`)) {
-      console.log(`${dir2}\\${filename}`);
+
       let source = fs.createReadStream(file);
       let dest = fs.createWriteStream(path.resolve(dir2, filename));
 
       source.pipe(dest); +
-        source.on('end', function () { console.log('Succesfully copied'); });
+        source.on('end', function () {
+          //console.log('Succesfully copied');
+        });
       source.on('error', function (err) { console.log(err); });
 
     }
@@ -283,47 +285,53 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
   let fileName = "";
   if (label1 !== "") {
     fileName = 'manifest-' + label1 + 'name';
-  }else if (label2 !== "") {
+  } else if (label2 !== "") {
     fileName = 'manifest-' + label2 + 'name';
-  }else if (label3 !== "") {
+  } else if (label3 !== "") {
     fileName = 'manifest-' + label3 + 'name';
-  }else if (label4 !== "") {
+  } else if (label4 !== "") {
     fileName = 'manifest-' + label4 + 'name';
   }
-
+  console.log(fileName + "=---" + version);
   let buffer = "\r\ncommand : " + command + "\r\nfile particulars :" + FileDetails_artifactID +
 
     "\r\nTimeStamp:" + formattedDate + "\r\nFilePath: " + manifestPath + "\r\n/////////////////////////////////////////////////////////////////////";
 
+  if (label1 !== null || label2 !== null || label3 !== null || label4 !== null) {
+    if (!fs.existsSync(`${targetRepo}\\Manifest\\${fileName}.txt`)) {
 
-    if (!fs.existsSync(`${targetRepo}\\Manifest\\${fileName}.txt`)){
+      fs.writeFileSync(`${targetRepo}\\Manifest\\${fileName}.txt`, buffer, function (err) {
+        if (err) throw (err);
+      });
+      let bufferindex = "";
+      if (label1 !== "") {
+        bufferindex = bufferindex + "\r\n" + fileName + ":" + label1;
+      } if (label2 !== "") {
+        bufferindex = bufferindex + "\r\n" + fileName + ":" + label2;
+      } if (label3 !== "") {
+        bufferindex = bufferindex + "\r\n" + fileName + ":" + label3;
+      } if (label4 !== "") {
+        bufferindex = bufferindex + "\r\n" + fileName + ":" + label4;
+      }
 
-            fs.writeFileSync(`${targetRepo}\\Manifest\\${fileName}.txt`, buffer, function(err) {
-               if (err) throw(err);
-            });
-            let bufferindex = "";
-            if (label1 !== "") {
-              bufferindex = bufferindex+  "\r\n" + fileName + ":" + label1 ;
-            }  if (label2 !== "") {
-              bufferindex = bufferindex+  "\r\n" + fileName + ":" + label2 ;
-            }  if (label3 !== "") {
-              bufferindex = bufferindex+  "\r\n" + fileName + ":" + label3 ;
-            }  if (label4 !== "") {
-              bufferindex = bufferindex+  "\r\n" + fileName + ":" + label4 ;
-            }
-      
-            bufferindex = bufferindex+  "\r\n";
+      bufferindex = bufferindex + "\r\n";
 
-            fs.appendFile(`${targetRepo}\\Manifest\\ManifestIndex.txt`, bufferindex, function (err) {
-                if (err) throw err;
-            });
+      fs.appendFile(`${targetRepo}\\Manifest\\ManifestIndex.txt`, bufferindex, function (err) {
+        if (err) throw err;
+      });
 
-    }else {
+    } else {
       fs.appendFile(`${targetRepo}\\Manifest\\${version}`, buffer, function (err) {
         if (err) throw err;
       })
     }
- };
+  } else {
+    fs.appendFile(`${targetRepo}\\Manifest\\${version}`, buffer, function (err) {
+      if (err) throw err;
+    })
+  }
+
+};
 
 
 module.exports = {

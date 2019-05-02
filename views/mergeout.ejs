@@ -30,12 +30,31 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
         /* Control the left side */
         .left {
             left: 40;
-            background-color: black;
+            background-color: darkslategray
         }
 
         /* Control the right side */
         .right {
             right: 0;
+
+        }
+
+        th {
+            text-align: left
+        }
+
+        h1 {
+
+            font-family: 'Open Sans', sans-serif;
+            color: #555;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -3px;
+            line-height: 1;
+            text-shadow: #EDEDED 3px 2px 0;
+            position: relative;
 
         }
 
@@ -93,29 +112,17 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
             font-size: 20px;
         }
 
-        /* 
-            body {
-
+        /* body {
                     justify-content: center;
-
                     text-align: center;
-
                     border-color: black;
-
                     border-width: 2px;
-
                     border-style: solid;
-
                     border-radius: 5px;
-
                     padding: 30px;
-
                     margin-top: 20px;
-
                     margin-left: 250px;
-
                     margin-right: 250px;
-
             } */
 
 
@@ -149,13 +156,15 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
         <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
 
             <h1 style="color: white">AKP VCS</h1><br><br><br>
-            <a href="/"><i class="fas fa-home" style="color: white;padding-right: 15px"></i>Home</a><br><br>
-            <a href="/create"><i class="far fa-plus-square" style="color: white;padding-right: 15px"></i>Create
+            <!-- <a href="/"><i class="fas fa-home" style="color: white;padding-right: 15px"></i>Home</a><br><br> -->
+            <a href="/create" style="width: 150px"><i class="far fa-plus-square" style="color: white;padding-right: 15px"></i>Create
                 Repository</a><br><br>
-            <a href="/checkin"><i class="fas fa-upload" style="color: white;padding-right: 15px"></i>Checkin</a><br><br>
-            <a href="/checkout" class="active"><i class="fas fa-download"
+            <a href="/checkin" style="width: 150px"><i class="fas fa-upload" style="color: white;padding-right: 15px"></i>Checkin</a><br><br>
+            <a href="/checkout" style="width: 150px"><i class="fas fa-download"
                     style="color: white;padding-right: 15px"></i>Checkout</a><br><br>
-            <a href="/mergeout" class="active"><i class="fas fa-download"
+            <a href="/mergein" style="width: 150px"><i class="fas fa-upload"
+                    style="color: white;padding-right: 15px"></i>Merge In</a><br><br>
+            <a href="/mergeout" style="width: 150px"><i class="fas fa-download"
                     style="color: white;padding-right: 15px"></i>Merge Out</a><br><br>
         </div>
     </div>
@@ -181,7 +190,7 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
                         <th><input type="text" name="trgt" ID="trgt"><br></th>
                     </tr>
                     <tr>
-                        <th><label>Label:</label></th>
+                        <th><label>Target Label:</label></th>
                         <th><input type="text" name="l1" ID="lbl1"></th>
                     </tr>
 

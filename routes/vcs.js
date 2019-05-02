@@ -226,7 +226,7 @@ const copyFile = (file, dir2,targetRepo) => {
         console.log(`artifactID: ${artifactID}`);
 
         if(!fs.existsSync(`${dir2}\\${filename}`)){
-            console.log(`${dir2}\\${filename}`);
+           // console.log(`${dir2}\\${filename}`);
             let source = fs.createReadStream(file);
             let dest = fs.createWriteStream(path.resolve(dir2, filename));
 
