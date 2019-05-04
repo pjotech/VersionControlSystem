@@ -200,7 +200,7 @@ router.post('/checkout', function (req, res) {
     ph = ph + "</tr>";
     while (next = liner.next()) {
 
-      if (next.toString() != "") {
+      if (next.toString().split(":")[0] != "") {
         if (next.toString('ascii').split(":")[1] != "") {
           ph = ph + "<tr>";
           ph = ph + "<td>" + next.toString('ascii').split(":")[0] + "</td>";
@@ -719,38 +719,44 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
     "\r\nTimeStamp:" + formattedDate + "\r\nFilePath: " + manifestPath + "\r\n/////////////////////////////////////////////////////////////////////";
 
 
-  if (label1 !== "" || label2 !== "" || label3 !== "" || label4 !== "" ) {
-    fs.writeFile(`${targetRepo}\\Manifest\\${fileName}.txt`, buffer, function (err) {
-      if (err) {
-        return console.log(err);
-      }
-
-      fs.appendFile(`${targetRepo}\\Manifest\\${version}`, buffer, function (err) {
-        if (err) {
-          return console.log(err);
+    if (label1 !== "" || label2 !== "" || label3 !== "" || label4 !== "") {
+      if (!fs.existsSync(`${targetRepo}\\Manifest\\${fileName}.txt`)) {
+  
+        if(fileName !== ""){
+          fs.writeFile(`${targetRepo}\\Manifest\\${fileName}.txt`, buffer, function (err) {
+            if (err) {
+              return console.log(err);
+            }
+            console.log("7"+fileName);
+          });
         }
-      })
-      console.log("The file was saved!");
-    });
-
-    let bufferindex = "";
-    if (label1 !== "") {
-      bufferindex = bufferindex + "\r\n" + fileName + ":" + label1;
-    } if (label2 !== "") {
-      bufferindex = bufferindex + "\r\n" + fileName + ":" + label2;
-    } if (label3 !== "") {
-      bufferindex = bufferindex + "\r\n" + fileName + ":" + label3;
-    } if (label4 !== "") {
-      bufferindex = bufferindex + "\r\n" + fileName + ":" + label4;
-    }
-
-    bufferindex = bufferindex + "\r\n";
-
-    fs.appendFile(`${targetRepo}\\Manifest\\ManifestIndex.txt`, bufferindex, function (err) {
-      if (err) throw err;
-    });
-
-  } else {
+        
+        
+        let bufferindex = "";
+        if (label1 !== "") {
+          bufferindex = bufferindex + "\r\n" + fileName + ":" + label1;
+        } if (label2 !== "") {
+          bufferindex = bufferindex + "\r\n" + fileName + ":" + label2;
+        } if (label3 !== "") {
+          bufferindex = bufferindex + "\r\n" + fileName + ":" + label3;
+        } if (label4 !== "") {
+          bufferindex = bufferindex + "\r\n" + fileName + ":" + label4;
+        }
+  
+        bufferindex = bufferindex + "\r\n";
+  
+        fs.appendFile(`${targetRepo}\\Manifest\\ManifestIndex.txt`, bufferindex, function (err) {
+          if (err) throw err;
+        });
+  
+      } else {
+        console.log("2");
+        fs.appendFile(`${targetRepo}\\Manifest\\${version}`, buffer, function (err) {
+          if (err) throw err;
+        })
+      }
+    }else {
+      console.log("3");
     fs.appendFile(`${targetRepo}\\Manifest\\${version}`, buffer, function (err) {
       if (err) throw err;
     })

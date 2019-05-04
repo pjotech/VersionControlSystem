@@ -140,11 +140,17 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
 
         /* selected link */
 
-        a:active,
-        a:hover {
+        .active{
             border-color: white;
             border-width: 2px;
             color: black;
+            background-color: white
+        }
+
+        .inactive{
+            border-color: white;
+            border-width: 2px;
+            color: white;
         }
 
         a:link,
@@ -152,7 +158,6 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
             border-color: white;
             border-width: 2px;
             border-style: solid;
-            color: white;
             padding: 15px 25px;
             text-align: center;
             text-decoration: none;
@@ -169,14 +174,14 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
 
             <h1 style="color: white">AKP VCS</h1><br><br><br>
             <!-- <a href="/"><i class="fas fa-home" style="color: white;padding-right: 15px"></i>Home</a><br><br> -->
-            <a href="/create" style="width: 150px"><i class="far fa-plus-square" style="color: white;padding-right: 15px"></i>Create
+            <a href="/create" style="width: 150px;" class="inactive"><i class="far fa-plus-square" style="color: white;padding-right: 15px"></i>Create
                 Repository</a><br><br>
-            <a href="/checkin" style="width: 150px"><i class="fas fa-upload" style="color: white;padding-right: 15px"></i>Checkin</a><br><br>
-            <a href="/checkout" style="width: 150px"><i class="fas fa-download"
+            <a href="/checkin" style="width: 150px" class="active"><i class="fas fa-upload" style="padding-right: 15px"></i>Checkin</a><br><br>
+            <a href="/checkout" style="width: 150px" class="inactive"><i class="fas fa-download"
                     style="color: white;padding-right: 15px"></i>Checkout</a><br><br>
-            <a href="/mergein" style="width: 150px"><i class="fas fa-upload"
+            <a href="/mergein" style="width: 150px" class="inactive"><i class="fas fa-upload"
                     style="color: white;padding-right: 15px"></i>Merge In</a><br><br>
-            <a href="/mergeout" style="width: 150px"><i class="fas fa-download"
+            <a href="/mergeout" style="width: 150px" class="inactive"><i class="fas fa-download"
                     style="color: white;padding-right: 15px"></i>Merge Out</a><br><br>
         </div>
     </div>
