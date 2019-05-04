@@ -24,8 +24,6 @@ router.get('/', function (req, res) {
   res.render('create', {
     title: ''
   });
-  //commonAncestor('a121','a1221','C:\\Users\\aanch\\Documents\\ASE-543\\TestRepo');
-  commonAncestor('a111','a12','C:\\Users\\aanch\\Documents\\ASE-543\\TestRepo');
 });
 
 //--------------------------- for creating the project structure------------------------------
@@ -287,113 +285,113 @@ router.post('/checkout', function (req, res) {
 
 });
 
-// --------------------------------merge out click--------------------------------------
-router.post('/mergeout', function (req, res) {
-  console.log("merge out------------------------------")
-  console.log(req.body.srcpath)
-  console.log(req.body.lbl1)
-  console.log(req.body.repopath)
-  console.log(req.body.trgt)
-  fs.readdir(req.body.srcpath, function (err, files) {
-    let searchlabel = req.body.lbl1;
-    let repo = req.body.repopath;
-    let target = req.body.trgt;
-    let sourcepath = req.body.srcpath;
-    let manifestIndexpath = `${repo}\\Manifest\\ManifestIndex.txt`;
-    let manifestpath = `${repo}\\Manifest`;
-    let targetmanifestName = "";
-    fs.readFile(manifestIndexpath, function (err, data) {
-      if (err) {console.log(err)}
-      if (data.indexOf(`${searchlabel}`) >= 0) {
-          let dataArray = data.toString().split(/[ :\n\s+]+/) // convert file data in an array
-          const searchKeyword = `${searchlabel}`; // we are looking for a line, contains, key word 'user1' in the file
-          let lastIndex = -1; // let say, we have not found the keyword
-          console.log("dataArray"+"   " +dataArray)
-          for (let index=0; index<dataArray.length; index++) {
-              if (dataArray[index]== searchKeyword){
-                  // check if a line contains the  keyword
-              targetmanifestName = dataArray[index - 1];
-              lastIndex = index; // found a line includes a  keyword
-              break;
-              }
-          }
-      console.log("----------------------inside manifets index file-----------------------")
-      console.log(targetmanifestName);
-      }  else{}
-//    console.log("----------------------inside readfile-----------------------");console.log(manifestName);
-      targetmanifestName = `${manifestpath}\\`+targetmanifestName+`.txt`;
-      console.log(targetmanifestName);
-      fs.readFile(targetmanifestName, function (err, data) {
-        if (err) {console.log(err)}
-        let dataArray2 = data.toString().split(/[ =\n\s+]+/);
-        console.log("----------------------inside manifets  file-----------------------")
-//                     console.log("dataArray2---"+dataArray2)
-        let ManifestArtifactArray = "";let filePathManifestArray = "";let fileArray = "";
-        for (let index=0; index<dataArray2.length; index++){
-           if (dataArray2[index]== "particulars"){
-              ManifestArtifactArray = ManifestArtifactArray +" "+dataArray2[index + 1];}
-           else if (dataArray2[index]== "FilePath"){
-              filePathManifestArray = filePathManifestArray +" "+dataArray2[index + 1];
-              console.log("filePathManifestArray ----"+filePathManifestArray)
-              let choosedFileName = dataArray2[index + 1].substring(dataArray2[index + 1].lastIndexOf("\\") + 1, dataArray2[index + 1].length)
-              let temp = choosedFileName.substring(0,choosedFileName.lastIndexOf("_"))+"."+choosedFileName.substring(choosedFileName.lastIndexOf(".")+1,choosedFileName.length)
-              console.log("temp--"+temp)
-              fileArray = fileArray + " " + temp}
-        }
-        console.log("fileArray--"+fileArray)
-//                   let repo_sourcePath = `${repo}`;
-//                   console.log("To read repo")
-//                   console.log(repo_sourcePath)
-//                      fs.readdir(repo_sourcePath, function (err, data) { if (err) {console.log(err)}
-        files.forEach(file => {
-              let path = require('path');
-
-  //gets file name and adds it to dir2
-              console.log("file"+file)
-              console.log(`${sourcepath}`+"\\"+file)
-                              // console.log(__dirname  + file)
-//                               if(fileArray.indexOf(file)){
-//                                  if (err) {console.log(err)}
-//                                   console.log("file matched");
-//                                   console.log(`${repo_sourcePath}\\`+file);
-//                                   console.log(dataManifestArray)
-                                     // console.log(artifactID(`${sourcepath}`+"\\"+file));
-              artifactID(`${sourcepath}`+"\\"+file).then((artifactID) => {
-              console.log("ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")
-              if(ManifestArtifactArray.indexOf(artifactID) >= 0){
-                 console.log(file+"skip as source and target is same")}
-              else{
-                 let source_fileName = file;
-                 console.log(file+"is the source for Create MR and MT and grandma files")
-                 fs.readdir(req.body.trgt, function (err, files) {
-                   let target_fileName = file;
-                   console.log(target_fileName+"Read target directory")
-                   if(source_fileName == target_fileName){
-                     console.log("To copy--------------------")
-                     let f = path.basename(source_fileName, path.extname(source_fileName))+"_MR";console.log(f)
-                     let fT = path.basename(target_fileName, path.extname(target_fileName))+"_MT";
-                     let MR_file = f + path.extname(source_fileName);
-                     let MT_file = fT + path.extname(target_fileName);
-
-                     fs.access(`${target}`, (err) => {
-                        if(err){  // console.log(err)
-                            fs.mkdirSync(`${target}`);
-                         }
-                         copyFilewe(`${target}\\`+target_fileName, path.join(`${target}`, `${MT_file}`));
-                         copyFilewe(`${sourcepath}\\`+source_fileName, path.join(`${target}`, `${MR_file}`));
-                     });
-                   }
-                 });
-               }
-         }, (err) => {console.log(err)});
-       });
-      });
-    });
-//         }}
-  });
-
-  res.end('{"success" : "Merge out is done Successfully.Please proceed with merge in", "status" : 200}');
-  });
+// // --------------------------------merge out click--------------------------------------
+// router.post('/mergeout', function (req, res) {
+//   console.log("merge out------------------------------")
+//   console.log(req.body.srcpath)
+//   console.log(req.body.lbl1)
+//   console.log(req.body.repopath)
+//   console.log(req.body.trgt)
+//   fs.readdir(req.body.srcpath, function (err, files) {
+//     let searchlabel = req.body.lbl1;
+//     let repo = req.body.repopath;
+//     let target = req.body.trgt;
+//     let sourcepath = req.body.srcpath;
+//     let manifestIndexpath = `${repo}\\Manifest\\ManifestIndex.txt`;
+//     let manifestpath = `${repo}\\Manifest`;
+//     let targetmanifestName = "";
+//     fs.readFile(manifestIndexpath, function (err, data) {
+//       if (err) {console.log(err)}
+//       if (data.indexOf(`${searchlabel}`) >= 0) {
+//           let dataArray = data.toString().split(/[ :\n\s+]+/) // convert file data in an array
+//           const searchKeyword = `${searchlabel}`; // we are looking for a line, contains, key word 'user1' in the file
+//           let lastIndex = -1; // let say, we have not found the keyword
+//           console.log("dataArray"+"   " +dataArray)
+//           for (let index=0; index<dataArray.length; index++) {
+//               if (dataArray[index]== searchKeyword){
+//                   // check if a line contains the  keyword
+//               targetmanifestName = dataArray[index - 1];
+//               lastIndex = index; // found a line includes a  keyword
+//               break;
+//               }
+//           }
+//       console.log("----------------------inside manifets index file-----------------------")
+//       console.log(targetmanifestName);
+//       }  else{}
+// //    console.log("----------------------inside readfile-----------------------");console.log(manifestName);
+//       targetmanifestName = `${manifestpath}\\`+targetmanifestName+`.txt`;
+//       console.log(targetmanifestName);
+//       fs.readFile(targetmanifestName, function (err, data) {
+//         if (err) {console.log(err)}
+//         let dataArray2 = data.toString().split(/[ =\n\s+]+/);
+//         console.log("----------------------inside manifets  file-----------------------")
+// //                     console.log("dataArray2---"+dataArray2)
+//         let ManifestArtifactArray = "";let filePathManifestArray = "";let fileArray = "";
+//         for (let index=0; index<dataArray2.length; index++){
+//            if (dataArray2[index]== "particulars"){
+//               ManifestArtifactArray = ManifestArtifactArray +" "+dataArray2[index + 1];}
+//            else if (dataArray2[index]== "FilePath"){
+//               filePathManifestArray = filePathManifestArray +" "+dataArray2[index + 1];
+//               console.log("filePathManifestArray ----"+filePathManifestArray)
+//               let choosedFileName = dataArray2[index + 1].substring(dataArray2[index + 1].lastIndexOf("\\") + 1, dataArray2[index + 1].length)
+//               let temp = choosedFileName.substring(0,choosedFileName.lastIndexOf("_"))+"."+choosedFileName.substring(choosedFileName.lastIndexOf(".")+1,choosedFileName.length)
+//               console.log("temp--"+temp)
+//               fileArray = fileArray + " " + temp}
+//         }
+//         console.log("fileArray--"+fileArray)
+// //                   let repo_sourcePath = `${repo}`;
+// //                   console.log("To read repo")
+// //                   console.log(repo_sourcePath)
+// //                      fs.readdir(repo_sourcePath, function (err, data) { if (err) {console.log(err)}
+//         files.forEach(file => {
+//               let path = require('path');
+//
+//   //gets file name and adds it to dir2
+//               console.log("file"+file)
+//               console.log(`${sourcepath}`+"\\"+file)
+//                               // console.log(__dirname  + file)
+// //                               if(fileArray.indexOf(file)){
+// //                                  if (err) {console.log(err)}
+// //                                   console.log("file matched");
+// //                                   console.log(`${repo_sourcePath}\\`+file);
+// //                                   console.log(dataManifestArray)
+//                                      // console.log(artifactID(`${sourcepath}`+"\\"+file));
+//               artifactID(`${sourcepath}`+"\\"+file).then((artifactID) => {
+//               console.log("ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")
+//               if(ManifestArtifactArray.indexOf(artifactID) >= 0){
+//                  console.log(file+"skip as source and target is same")}
+//               else{
+//                  let source_fileName = file;
+//                  console.log(file+"is the source for Create MR and MT and grandma files")
+//                  fs.readdir(req.body.trgt, function (err, files) {
+//                    let target_fileName = file;
+//                    console.log(target_fileName+"Read target directory")
+//                    if(source_fileName == target_fileName){
+//                      console.log("To copy--------------------")
+//                      let f = path.basename(source_fileName, path.extname(source_fileName))+"_MR";console.log(f)
+//                      let fT = path.basename(target_fileName, path.extname(target_fileName))+"_MT";
+//                      let MR_file = f + path.extname(source_fileName);
+//                      let MT_file = fT + path.extname(target_fileName);
+//
+//                      fs.access(`${target}`, (err) => {
+//                         if(err){  // console.log(err)
+//                             fs.mkdirSync(`${target}`);
+//                          }
+//                          copyFilewe(`${target}\\`+target_fileName, path.join(`${target}`, `${MT_file}`));
+//                          copyFilewe(`${sourcepath}\\`+source_fileName, path.join(`${target}`, `${MR_file}`));
+//                      });
+//                    }
+//                  });
+//                }
+//          }, (err) => {console.log(err)});
+//        });
+//       });
+//     });
+// //         }}
+//   });
+//
+//   res.end('{"success" : "Merge out is done Successfully.Please proceed with merge in", "status" : 200}');
+//   });
 
  function copyFilewe(src, dest) {
   let readStream = fs.createReadStream(src);
@@ -667,8 +665,8 @@ const copyFile = (file, dir2, targetRepo, version, label1, label2, label3, label
 };
 
 //--------------------------- manifest file creation------------------------------------------------------
-const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version, label1, label2, label3, label4) => {
-
+const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version, label1, label2, label3, label4, grandma) => {
+grandma = typeof grandma !== 'undefined' ? grandma :"";
   let manifestPath = filePath;
 
   let command = commandLine;
@@ -686,10 +684,14 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
     fileName = `manifest_${checkOutTemp}_${label4}name`;
   }
 
-  let buffer = "\r\ncommand : " + command + "\r\nfile particulars :" + FileDetails_artifactID +
-
-    "\r\nTimeStamp:" + formattedDate + "\r\nFilePath: " + manifestPath + "\r\n/////////////////////////////////////////////////////////////////////";
-
+if(grandma != ""){
+  let buffer = "\r\ncommand = " + command + "\r\nfile particulars =" + FileDetails_artifactID +
+    "\r\nTimeStamp =" + formattedDate + "\r\nFilePath= " + manifestPath +  "\r\ngrandmaSnapshot = " + grandma + "\r\n/////////////////////////////////////////////////////////////////////";
+}
+else {
+  let buffer = "\r\ncommand = " + command + "\r\nfile particulars =" + FileDetails_artifactID +
+    "\r\nTimeStamp =" + formattedDate + "\r\nFilePath= " + manifestPath + "\r\n/////////////////////////////////////////////////////////////////////";
+}
 
   if (!fs.existsSync(`${targetRepo}\\Manifest\\${fileName}.txt`)) {
 
@@ -720,11 +722,153 @@ const manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version
   }
 };
 //---------------------------------Grandmaa-----------------------------------------------------------------------------------------------------
+// --------------------------------merge out click--------------------------------------
+  router.post('/mergeout', function (req, res) {
+     fs.readdir(req.body.srcpath, function (err, files) {
+          console.log(`-----------srclable:${req.body.lbl2}`)
 
+                 let searchlabel = req.body.lbl1;
+                 let sourcelabel = req.body.lbl2;
+                 let repo = req.body.repopath;
+                 let target = req.body.trgt;
+                 let sourcepath = req.body.srcpath;
+
+                 let manifestIndexpath = `${repo}\\Manifest\\ManifestIndex.txt`;
+                 let manifestpath = `${repo}\\Manifest`;
+                 let targetmanifestName = "";
+                       fs.readFile(manifestIndexpath, function (err, data) {   if (err) {console.log(err)}
+                        if (data.indexOf(`${searchlabel}`) >= 0) {
+                            let dataArray = data.toString().split(/[ :\n\s+]+/) // convert file data in an array
+                                const searchKeyword = `${searchlabel}`; // we are looking for a line, contains, key word 'user1' in the file
+                                let lastIndex = -1; // let say, we have not found the keyword
+                                 for (let index=0; index<dataArray.length; index++) {
+                                      if (dataArray[index]== searchKeyword){
+                                          // check if a line contains the  keyword
+                                          targetmanifestName = dataArray[index - 1];
+                                          lastIndex = index; // found a line includes a  keyword
+                                          break;
+                                        }
+                                  }
+                            }  else{console.log("label can not be found")}
+                        targetmanifestName = `${manifestpath}\\`+targetmanifestName+`.txt`;//gives the manifest path
+                     console.log(targetmanifestName);
+                  fs.readFile(targetmanifestName, function (err, data) {   if (err) {console.log(err)}//read manifest file
+                      let dataArray2 = data.toString().split(/[ =\n\s+]+/);
+                      let ManifestArtifactArray = "";let filePathManifestArray = "";let fileArray = "";
+                      for (let index=0; index<dataArray2.length; index++){ //read manifest to get the artifact
+                          if (dataArray2[index]== "particulars"){
+                              ManifestArtifactArray = ManifestArtifactArray +" "+dataArray2[index + 1];
+                          }
+                           else if (dataArray2[index]== "FilePath"){//get the file name , filepath
+                              filePathManifestArray = filePathManifestArray +" "+dataArray2[index + 1];
+                              // console.log("filePathManifestArray ----"+filePathManifestArray)
+                              let choosedFileName = dataArray2[index + 1].substring(dataArray2[index + 1].lastIndexOf("\\") + 1, dataArray2[index + 1].length)
+                              let temp = choosedFileName.substring(0,choosedFileName.lastIndexOf("_"))+"."+choosedFileName.substring(choosedFileName.lastIndexOf(".")+1,choosedFileName.length)
+                              // console.log("temp--"+temp)
+                              fileArray = fileArray + " " + temp
+                              console.log("temp--"+fileArray)
+                          }
+                      }
+                      console.log("-----------------------------------------")
+
+                      //----------read source files-----------------
+
+                        console.log(`Files inmerge:${files}`);
+           files.forEach(file => {
+              if (fs.lstatSync(`${sourcepath}\\${file}`).isDirectory()) {//checking if a directory---------------
+              sourcepath = `${sourcepath}`+"\\"+file; target = `${target}`+"\\"+file;
+                fs.readdir(`${sourcepath}`, function (err, files) {
+                   files.forEach(file => {
+                    createMRandMT(sourcepath,target, file, ManifestArtifactArray, fileArray, req.body.trgt,sourcelabel,searchlabel, repo);
+                   });
+                });
+              }
+            else {///not a directory but a file
+                   createMRandMT(sourcepath,target,file, ManifestArtifactArray, fileArray, req.body.trgt, sourcelabel,searchlabel, repo)
+                 }
+                             });
+                       });
+                  });
+        });
+          res.end('{"success" : "Merge out is done Successfully.Please proceed with merge in", "status" : 200}');
+    });
+
+    //-------------------   Create MR ,  MT , MG files on taret while merge out------------------------------
+    function createMRandMT(sourcepath, target, file,ManifestArtifactArray, fileArray,targetroot, sourcelabel,searchlabel,repo) {
+       let path = require('path');  //gets file name and adds it to dir2
+       console.log("after directory cheking-------------------")
+      console.log(ManifestArtifactArray);
+      // console.log(target);
+      //   console.log(file);console.log(ManifestArtifactArray);
+
+      console.log("destination:"+`${target}`+"\\"+file)
+      console.log("------------------"+`${target}`)
+       artifactID(`${sourcepath}`+"\\"+file).then((artifactID) => {
+         console.log("--------------In Artifact IDDDDDDDDDDIn -------------------")
+         console.log(artifactID);console.log(fileArray);console.log(file)
+        if(ManifestArtifactArray.indexOf(artifactID) >= 0 && fileArray.indexOf(file) >=0){
+           console.log(file+"skip as source and target is same")
+         }
+        else if(ManifestArtifactArray.indexOf(artifactID) < 0 && fileArray.indexOf(file) >=0){
+           let source_fileName = file;
+                                   // fs.readdir(targetroot, function (err, files) {
+           let target_fileName = file;
+           console.log(target_fileName+"Read target directory")
+           let f = path.basename(source_fileName, path.extname(source_fileName))+"_MR";console.log(f)
+           let fT = path.basename(target_fileName, path.extname(target_fileName))+"_MT";
+           let MR_file = f + path.extname(source_fileName);let MT_file = fT + path.extname(target_fileName);
+
+            console.log("traget of MR ----"+`${target}`, `${MR_file}`);
+            console.log("source of MR ----"+`${sourcepath}\\`+source_fileName);
+            //----------Get Grandma here--------------------
+
+            console.log(`sourcelbl:${sourcelabel},searchlabel:${searchlabel}`);
+            let ggLOop = "";
+            commonAncestor(sourcelabel,searchlabel,repo).then((commonAncestor)=>{
+          //  commonAncestor('s2','p3','C:\\Users\\aanch\\Documents\\ASE-543\\TestRepo').then((res)=>{
+              let grandma = commonAncestor;
+                return findnextManifest(grandma,repo).then((file1)=>{
+                  console.log(`grandma:${file1}`);
+                  let grand_manifestpath = `${repo}\\Manifest\\${file1}`;
+                  fs.readFile(grand_manifestpath, function (err, data) {   if (err) {console.log(err)}//read manifest file
+                      let dataArray2 = data.toString().split(/[ =\n\s+]+/);
+                      let filePathManifestArray = "";let fileArray = "";
+                      console.log(`grandmani:${dataArray2}`);
+                      for (let index=0; index<dataArray2.length; index++){ //read manifest to get the artifact
+                          if (dataArray2[index].indexOf(file) >= 0){
+                              ggLOop = dataArray2[index];
+                              console.log(ggLOop);
+                          }
+                       }
+                let fGrandmaMG = path.basename(file, path.extname(file))+"_MG";console.log(f)
+                let MG_file = fGrandmaMG + path.extname(file);
+                fs.access(`${target}`, (err) => {
+                  if(err){  // console.log(err)
+                      fs.mkdirSync(`${target}`);
+                          }
+                          copyFilewe(`${target}\\`+target_fileName, path.join(`${target}`, `${MT_file}`));
+                          copyFilewe(`${sourcepath}\\`+source_fileName, path.join(`${target}`, `${MR_file}`));
+                          copyFilewe(`${ggLOop}`, path.join(`${target}`, `${MG_file}`));
+                        // manifestFile = (filePath, commandLine, fileartifactID, targetRepo, version, label1, label2, label3, label4, grandma) 
+                 });
+                });
+                });
+
+            });
+
+            console.log("aegfskjffgbbbbbbbbbbbbn"+`${ggLOop}`)
+            console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+path.join(`${target}`, `${MG_file}`))
+            ///---------------end of grandma-------------------------------------------
+                 }
+       }, (err) => {
+         console.log(err)
+         });
+     }
+  //  ------------------------------------------aanchal
 const findAllAncestor1 = (version1,repoPath) => {
-
+console.log(`In findAllAncestor1:${version1} + ${repoPath}`);
   maifest = findManifest(version1,repoPath);
-
+  console.log(`manifest:${findManifest(version1,repoPath)}`)
 return findAncester(maifest,repoPath).then((file)=>{
   console.log(`file1:${file}`)
   if(file != "noAncestorFile"){
@@ -832,6 +976,7 @@ const findAllAncestor2 = (version2,repoPath) => {
 
 const commonAncestor = (version1,version2,repoPath) => {
 
+console.log(`Version:${version1}`);
   return findAllAncestor1(version1,repoPath).then(()=>{
 
   console.log('Ancestor 1 is resolved: ');
@@ -842,6 +987,7 @@ const commonAncestor = (version1,version2,repoPath) => {
         //console.log(`arr2:${arr2}`);
         console.log(`array here 1:${headers1},2:${headers2}`);
         let final_ancestor = _.intersectionWith(arr1, arr2, _.isEqual);
+        return final_ancestor[0];
         console.log(`final_ancestor:${final_ancestor[0]}`)
       });
   });
@@ -880,20 +1026,52 @@ return new Promise(resolve => {
 }
 
 const findnextManifest = (file,repoPath) => {
+
   let name = path.basename(file,'.txt');
   let namelist = name.split("_");
-  let verLabel = namelist[2];
+  let verLabel = (namelist[2] != undefined)? namelist[2] : namelist[0];
   let files = fs.readdirSync(`${repoPath}\\Manifest`);
+  let m_path = (`${repoPath}\\Manifest\\ManifestIndex.txt`)
 
-return new Promise(resolve => {
-  files.forEach(file=>{
+return new Promise((resolve,reject) => {
+
+  fs.readFile(m_path, function (err, data) {
+                        if (err) {console.log(err)}
+                        let ancestor_manifestName="";
+                        if (data.indexOf(`${verLabel}`) >= 0) {
+                        let dataArray = data.toString().split(/[ :\n\s+]+/) // convert file data in an array
+                        const searchKeyword = `${verLabel}`; // we are looking for a line, contains, key word 'user1' in the file
+                        let lastIndex = -1; // let say, we have not found the keyword
+                        for (let index=0; index<dataArray.length; index++) {
+                                                if (dataArray[index]== searchKeyword){
+                                                   // check if a line contains the  keyword
+                                                   ancestor_manifestName = dataArray[index - 1];
+                                                   //console.log(`Aminfestfile:${ancestor_manifestName}`);
+                                                   lastIndex = index; // found a line includes a  keyword
+                                                   resolve(`${ancestor_manifestName}.txt`);
+                                                break;
+                                                }
+                                            }
+
+                        }  else{
+                        reject('no manifest file with name');
+                        }
+    });
+
+
+/*  files.forEach(file=>{
     if(file.includes(`_${verLabel}name`)){
+      console.log(`manifestfromPrevious:${file}`);
       resolve(file);
     }
   },()=>{
     reject('no manifest file with name');
-  })
+  })*/
 })
 }
+
+
+
+
 
 module.exports = router;
