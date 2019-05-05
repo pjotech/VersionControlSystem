@@ -6,7 +6,7 @@ Team: AKP
 Members:Aanchal Tandel
 	Krishna Desai
         Priya  M Joseph
-        Nithin Reddy Allala
+        Heena Pallan
         Sujata Patil
 
 =>VCS(Version Control System)
