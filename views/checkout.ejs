@@ -99,31 +99,6 @@ Sujata Patil (sujata.patil@student.csulb.edu
             font-size: 20px;
         }
 
-        /* 
-            body {
-
-                    justify-content: center;
-
-                    text-align: center;
-
-                    border-color: black;
-
-                    border-width: 2px;
-
-                    border-style: solid;
-
-                    border-radius: 5px;
-
-                    padding: 30px;
-
-                    margin-top: 20px;
-
-                    margin-left: 250px;
-
-                    margin-right: 250px;
-
-            } */
-
 
         /* selected link */
 
@@ -138,6 +113,10 @@ Sujata Patil (sujata.patil@student.csulb.edu
             border-color: white;
             border-width: 2px;
             color: white;
+        }
+
+        a:hover{
+            background-color: grey
         }
 
         a:link {
@@ -249,7 +228,7 @@ Sujata Patil (sujata.patil@student.csulb.edu
             <form action='/checkout' method='POST' enctype="multipart/form-data">
 
                 <h1 style="color: black">CheckOut</h1>
-                <br>
+        
 
                 <table>
                     <tr>
@@ -257,8 +236,7 @@ Sujata Patil (sujata.patil@student.csulb.edu
                         <th><input type="text" name="repo" ID="repo"></th>
                     </tr>
                 </table>
-                <br>
-                <br>
+                
                 <input type='submit' ID="view" />
                 <table id="mytable" class="table table-striped table-bordered table-sm">
 
@@ -297,9 +275,9 @@ Sujata Patil (sujata.patil@student.csulb.edu
 
 
                 </table>
-                <div id="checkoutsubmit">
+                
                     <input type='submit' ID="CheckoutSubmit" />
-                </div>
+              
                 <br>
                 <br>
                 <br>
@@ -323,7 +301,7 @@ Sujata Patil (sujata.patil@student.csulb.edu
 
                     $("#mytable").append(result.success);
                     getPagination('#mytable');
-                    document.getElementById('checkoutsubmit').style.display = "block";
+                    document.getElementById('CheckoutSubmit').style.display = "block";
                     document.getElementById('table').style.display = "block";
                     document.getElementById('pagi').style.display = "block";
                     document.getElementById('view').style.display = "none";
@@ -345,7 +323,7 @@ Sujata Patil (sujata.patil@student.csulb.edu
 
 
         function onload1() {
-            document.getElementById('checkoutsubmit').style.display = "none";
+            document.getElementById('CheckoutSubmit').style.display = "none";
             document.getElementById('table').style.display = "none";
             document.getElementById('pagi').style.display = "none";
         }
@@ -357,7 +335,7 @@ Sujata Patil (sujata.patil@student.csulb.edu
 
 
         function getPagination(table) {
-            var maxRows = 9;
+            var maxRows = 3;
             var lastPage = 1;
 
             $('.pagination').find("li").slice(1, -1).remove();

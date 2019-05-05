@@ -112,20 +112,6 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
             font-size: 20px;
         }
 
-        /* body {
-                    justify-content: center;
-                    text-align: center;
-                    border-color: black;
-                    border-width: 2px;
-                    border-style: solid;
-                    border-radius: 5px;
-                    padding: 30px;
-                    margin-top: 20px;
-                    margin-left: 250px;
-                    margin-right: 250px;
-            } */
-
-
         /* selected link */
 
         .active {
@@ -153,6 +139,60 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
             border-radius: 10px;
             transform: scaleX(1);
         }
+
+        a:hover{
+            background-color: grey
+        }
+
+        #mytable {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 90%;
+            margin-right: 10px
+        }
+
+        #mytable td,
+        #mytable th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #mytable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+       
+
+        #mytable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: darkslategray;
+            color: white;
+        }
+
+        .pagination {
+            display: inline-block;
+        }
+
+        .pagination li {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
     </style>
 </head>
 
@@ -177,43 +217,74 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
     <section class="split right" style="justify-content: center">
         <div class="" style="justify-content: center">
 
-            <form action='/mergeout' method='POST' enctype="multipart/form-data">
+            <form name="mergeout" action='/mergeout' method='POST' enctype="multipart/form-data" onsubmit="return validateForm()">
                 <h1 style="color: black">Merge Out</h1>
-                <br>
+                
 
                 <table>
                     <tr>
                         <th><label>Repository Path:</label></th>
                         <th><input type="text" name="repopath" ID="repopath"></th>
                     </tr>
+                </table>
+                <input type='submit' ID="view" />
+                <table id="mytable" class="table table-striped table-bordered table-sm">
+
+
+                </table>
+                <div class='pagination-container' style="align-content: center;" id="pagi">
+                    <nav>
+                        <ul class="pagination">
+
+                            <li data-page="prev" class="pagination">
+                                <span>
+                                    < <span class="sr-only">(current)
+                                </span></span>
+                            </li>
+                            <!--	Here the JS Function Will Add the Rows -->
+                            <li data-page="next" id="prev" class="pagination">
+                                <span> > <span class="sr-only">(current)</span></span>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <table id="table">
                     <tr>
                         <th><label>Source Path:</label></th>
-                        <th><input type="text" name="srcpath" ID='srcpath'></th>
+                        <th><input type="text" name="srcpath" ID='srcpath' ></th>
                     </tr>
                     <tr>
                         <th><label>Source Label:</label></th>
-                        <th><input type="text" name="l2" ID="lbl2"></th>
+                        <th><input type="text" name="lbl2" ID="lbl2" onfocusout="validateForm()" value="SujataFrstChKIn1.1"></th>
+						<th><span id="errorname2" style="color:red;font-weight:bold"></span></th>
                     </tr>
                     <tr>
                         <th><label>Target Path:</label></th>
-                        <th><input type="text" name="trgt" ID="trgt"><br></th>
+                        <th><input type="text" name="trgt" ID="trgt" value="F:\PriyafirstChkout"></th>
                     </tr>
                     <tr>
                         <th><label>Target Label:</label></th>
-                        <th><input type="text" name="l1" ID="lbl1"></th>
+                        <th><input type="text" name="lbl1" ID="lbl1" onfocusout="validateForm()" value="PriyachekIN1.1"></th>
+						<th><span id="errorname1" style="color:red;font-weight:bold"></span></th>
                     </tr>
                     
                 </table>
 
 
-                <input type='submit' />
+                <input type='submit' ID="mergeSubmit"/>
+                <br>
+                <br>
+                <br>
             </form>
         </div>
     </section>
     <script>
 
         $('form').on('submit', makeRequest);
+        
         function makeRequest(e) {
+            if(document.getElementById('errorname1').innerHTML == ""
+			&& document.getElementById('errorname2').innerHTML == ""){
             e.preventDefault();
             $.ajax({
                 url: '/mergeout',
@@ -222,13 +293,20 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
                 dataType: 'json',
                 success: function (result) {
 
-                    alert("Files Committed");
+                    $("#mytable").append(result.success);      
+                    getPagination('#mytable');
+                    document.getElementById('mergeSubmit').style.display = "block";
+                    document.getElementById('table').style.display = "block";
+                    document.getElementById('pagi').style.display = "block";
+                    document.getElementById('view').style.display = "none";
                     document.getElementById('srcpath').value = '';
                     document.getElementById('lbl1').value = '';
                     document.getElementById('lbl2').value = '';
-                    document.getElementById('repopath').value = '';
+                    //document.getElementById('repopath').value = '';
                     document.getElementById('trgt').value = '';
                     if (result.status == 200) {
+
+                        alert(result.success.toString());
                         self.isEditMode(!self.isEditMode());
                     }
                 },
@@ -236,6 +314,113 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
                     alert(result.message.toString());
                 }
             });
+        }
+        }
+
+        // validation for underscore
+	function validateForm() 
+	{
+		var x = document.forms["mergeout"]["lbl1"].value;
+		var y = document.forms["mergeout"]["lbl2"].value;
+		if(x.includes("_"))
+		{
+		
+			document.getElementById('errorname1').innerHTML="underscore(_) is not allowed";
+			//alert("Not valid input. Remove '_'.")
+			document.forms["mergeout"]["lbl1"].focus();
+			return false;
+		}else{
+			document.getElementById('errorname1').innerHTML="";
+			return true;
+		}
+		
+		if(y.includes("_"))
+		{
+		
+			document.getElementById('errorname2').innerHTML="underscore(_) is not allowed";
+			//alert("Not valid input. Remove '_'.")
+			document.forms["mergeout"]["lbl2"].focus();
+			return false;
+		}else{
+			document.getElementById('errorname2').innerHTML="";
+			return true;
+		}
+		
+    }
+    
+    function onload1() {
+            document.getElementById('mergeSubmit').style.display = "none";
+            document.getElementById('table').style.display = "none";
+            document.getElementById('pagi').style.display = "none";
+        }
+
+        window.onload = onload1();
+
+
+        getPagination('#mytable');
+
+
+        function getPagination(table) {
+            var maxRows = 3;
+            var lastPage = 1;
+
+            $('.pagination').find("li").slice(1, -1).remove();
+            var trnum = 0;									// reset tr counter 
+
+            $('.pagination').show();
+
+
+            var totalRows = $(table + ' tbody tr').length;		// numbers of rows 
+            $(table + ' tr:gt(0)').each(function () {			// each TR in  table and not the header
+                trnum++;									// Start Counter 
+                if (trnum > maxRows) {						// if tr number gt maxRows
+
+                    $(this).hide();							// fade it out 
+                } if (trnum <= maxRows) { $(this).show(); }// else fade in Important in case if it ..
+            });											//  was fade out to fade it in 
+            if (totalRows > maxRows) {						// if tr total rows gt max rows option
+                var pagenum = Math.ceil(totalRows / maxRows);	// ceil total(rows/maxrows) to get ..  
+                //	numbers of pages 
+                for (var i = 1; i <= pagenum;) {			// for each page append pagination li 
+                    $('.pagination #prev').before('<li data-page="' + i + '">\
+								      <span>'+ i++ + '<span class="sr-only">(current)</span></span>\
+								    </li>').show();
+                }											// end for i 
+            } 												// end if row count > max rows
+            $('.pagination [data-page="1"]').addClass('active'); // add active class to the first li 
+            $('.pagination li').on('click', function (evt) {		// on click each page
+                evt.stopImmediatePropagation();
+                evt.preventDefault();
+                var pageNum = $(this).attr('data-page');	// get it's number
+
+                // get Max Rows from select option
+
+                if (pageNum == "prev") {
+                    if (lastPage == 1) { return; }
+                    pageNum = --lastPage;
+                }
+                if (pageNum == "next") {
+                    if (lastPage == ($('.pagination li').length - 2)) { return; }
+                    pageNum = ++lastPage;
+                }
+
+                lastPage = pageNum;
+                var trIndex = 0;							// reset tr counter
+                $('.pagination li').removeClass('active');	// remove active class from all li 
+                $('.pagination [data-page="' + lastPage + '"]').addClass('active');// add active class to the clicked 
+                // $(this).addClass('active');					// add active class to the clicked 
+                $(table + ' tr:gt(0)').each(function () {		// each tr in table not the header
+                    trIndex++;								// tr index counter 
+                    // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+                    if (trIndex > (maxRows * pageNum) || trIndex <= ((maxRows * pageNum) - maxRows)) {
+                        $(this).hide();
+                    } else { $(this).show(); } 				//else fade in 
+                }); 										// end of for each tr in table
+            });										// end of on click pagination list
+
+
+
+
         }
     </script>
 </body>

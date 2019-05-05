@@ -165,6 +165,10 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
             border-radius: 10px;
             transform: scaleX(1);
         }
+
+        a:hover{
+            background-color: grey
+        }
     </style>
 </head>
 
@@ -189,7 +193,7 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
     <section class="split right" style="justify-content: center">
         <div class="" style="justify-content: center">
 
-            <form action='/checkin' method='POST' enctype="multipart/form-data">
+            <form name="checkin" action='/checkin' method='POST' enctype="multipart/form-data" onsubmit="return validateForm()">
                 <h1 style="color: black">CheckIn</h1>
                 <br>
 
@@ -200,19 +204,23 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
                     </tr>
                     <tr>
                         <th><label>Label1:</label></th>
-                        <th><input type="text" name="l1" ID="lbl1"></th>
-                    </tr>
+                        <th><input type="text" name="l1" ID="lbl1" onfocusout="validateForm()"></th> 
+						<th><span id="errorname1" style="color:red;font-weight:bold"></span></th>
+                    </tr> 
                     <tr>
                         <th><label>Label2:</label></th>
-                        <th><input type="text" name="l2" ID="lbl2"></th>
+                        <th><input type="text" name="l2" ID="lbl2" onfocusout="validateForm()"></th>
+						<th><span id="errorname2" style="color:red;font-weight:bold"></span></th> 
                     </tr>
                     <tr>
                         <th><label>Label3:</label></th>
-                        <th><input type="text" name="l3" ID="lbl3"></th>
+                        <th><input type="text" name="l3" ID="lbl3" onfocusout="validateForm()"></th>
+						<th><span id="errorname3" style="color:red;font-weight:bold"></span></th> 
                     </tr>
                     <tr>
                         <th><label>Label4:</label></th>
-                        <th><input type="text" name="l4" ID="lbl4"></th>
+                        <th><input type="text" name="l4" ID="lbl4" onfocusout="validateForm()"></th>
+						<th><span id="errorname4" style="color:red;font-weight:bold"></span></th>
                     </tr>
                     <tr>
                         <th><label>Target Path:</label></th>
@@ -222,14 +230,22 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
 
 
                 <input type='submit' />
+                <br>
+                <br>
+                <br>
             </form>
         </div>
     </section>
     <script>
 
-        $('form').on('submit', makeRequest);
+$('form').on('submit', makeRequest);
         function makeRequest(e) {
-            e.preventDefault();
+		
+			if(document.getElementById('errorname1').innerHTML == ""
+			&& document.getElementById('errorname2').innerHTML == ""
+			&& document.getElementById('errorname3').innerHTML == ""
+			&& document.getElementById('errorname4').innerHTML == ""){
+			 e.preventDefault();
             $.ajax({
                 url: '/checkin',
                 data: $("form").serialize(),
@@ -252,7 +268,54 @@ Sujata Patil (sujata.patil@student.csulb.edu)-->
                     alert(result.message.toString());
                 }
             });
+			}
+           
         }
+		
+		// validation for underscore
+		function validateForm() 
+		{
+			var flag = true;
+			var x = document.forms["checkin"]["lbl1"].value;
+			var y = document.forms["checkin"]["lbl2"].value;
+			var z = document.forms["checkin"]["lbl3"].value;
+			var w = document.forms["checkin"]["lbl4"].value;
+			if(x.includes("_"))
+			{			
+				document.getElementById('errorname1').innerHTML="underscore(_) is not allowed";
+				flag = false;
+			}
+			if(y.includes("_"))
+			{
+				//alert("coming here");
+				document.getElementById('errorname2').innerHTML="underscore(_) is not allowed";
+				flag = false;
+			}
+			if(z.includes("_"))
+			{
+				document.getElementById('errorname3').innerHTML="underscore(_) is not allowed";
+				flag = false;
+			}
+			if(w.includes("_"))
+			{
+				document.getElementById('errorname4').innerHTML="underscore(_) is not allowed";
+				flag = false;
+			}
+			
+			if(flag == false)
+			{
+				return flag;
+			}
+			else{
+				document.getElementById('errorname1').innerHTML="";
+				document.getElementById('errorname2').innerHTML="";
+				document.getElementById('errorname3').innerHTML="";
+				document.getElementById('errorname4').innerHTML="";
+				return flag;
+			}
+			
+			
+		}
     </script>
 </body>
 
